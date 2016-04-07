@@ -22,7 +22,7 @@ It could be confusing to use docker initially. Docker is very useful to package 
 	* https://docs.docker.com/mac/step_one/ for Mac
 	* https://docs.docker.com/engine/installation/ for Linux and choose your Linux distribution
 2. Mac users should open "Docker Quickstart Terminal"
-3. Type: ```docker run -it b.gcr.io/tensorflow/tensorflow /bin/bash```
+3. Type: ```docker run -p 8888:8888 -it b.gcr.io/tensorflow/tensorflow /bin/bash```
 	* ```docker run``` : to run a given image.
 	* ```-i``` : stands for interactive.
 	* ```b.gcr.io/tensorflow/tensorflow``` : one of TensorFlow images provided by Google. when run this command at the first time, we will get the following response: ```Unable to find image 'b.gcr.io/tensorflow/tensorflow:latest' locally latest: Pulling from tensorflow/tensorflow``` and the download of the image from Google Cloud Repository will start. It will take some minutes.
