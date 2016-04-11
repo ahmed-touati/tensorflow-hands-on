@@ -1,6 +1,20 @@
-#How to install TensorFlow
+# tensorflow-hands-on
+
+This repository is meant to share materials about deep learning and TensorFlow used during my two interventions at training program 
+<a href="http://portail-formation.cnam.fr/ecole-siti/ingenierie-mathematique/statistique-bioinformatique/certificat-de-specialisation-analyste-de-donnees-massives-669531.kjsp?RH=204">Certificat de spécialisation Analyste de données massives</a>
+in <a href="http://www.cnam.fr/">Conservatoire national des arts et métiers</a>.
+
+# Deep learning Slides
+
+If you would like to have a quick overview of deep learning basic architectures and its applications in computer vision and Natural language processing,
+you could find the presentation in the following link: http://ahmed-touati.github.io/tensorflow-hands-on/
+
+# Hands on and installation
+
 This hands-on is meant to dive into the Google open-sourced machine learning library <a href="https://www.tensorflow.org/">TensorFlow</a>. 
 Coding will be in Python 2.7 using <a href="http://ipython.org/notebook.html">IPython Notebook</a>.
+
+This hands-on is inspired from the udacity course of deep learning: https://www.udacity.com/course/deep-learning--ud730.
 
 I will explain here how to install TensorFlow on Mac or Linux.
 For the windows users, you could follow the instructions described in <a href="http://www.netinstructions.com/how-to-install-and-run-tensorflow-on-a-windows-pc/">How to install and run TensorFlow on a Windows PC</a>. However, windows users should read this following tutorial especially the last section as the instructions are a bit similar for the three operating systems.
