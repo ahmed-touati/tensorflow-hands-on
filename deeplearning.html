@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Deeplearning</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Ahmed TOUATI">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="reveal.js-3.0.0/css/reveal.css">
+		<link rel="stylesheet" href="reveal.js-3.0.0/css/theme/blood.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="reveal.js-3.0.0/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js-3.0.0/css/print/pdf.css' : 'reveal.js-3.0.0/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h3>Deep Learning: An overview</h3>
+					<p>Ahmed Touati</p>
+					<p>Data Scientist @ AXA Data Innovation Lab</p>
+					<img width="200" height="50" data-src="reveal.js-3.0.0/images/dil.png">
+				</section>
+				<section>
+					<p>Plan</p>
+					<ol>
+						<li>Why deep learning? history and motivation</li>
+						<li>Learning algorithm and regularization</li>
+						<li>Computer vision: convolutional neural network</li>
+						<li>Natural language processing: recurrent neural network</li>
+
+					</ol>	
+				</section>
+				<section>
+					<h3>Perceptron: first trained machine</h3>
+					<ul>
+						<li>First learning machine build at Cornell in 1960</li>
+						<li>The perceptron was a linear classifier on top of a simple features extractor</li>
+						<li> $y = \text{sign}(\sum_{i=1}^Nw_iF_i(x)+b)$ </li>
+					</ul>
+					<img width="300" height="300" data-src="reveal.js-3.0.0/images/perceptron.jpg">
+					<img width="300" height="300" data-src="reveal.js-3.0.0/images/perceptron_diagram.png">
+				</section>
+				<section>
+					<h3>Limitation of linear classifier</h3>
+					<div class="half">
+						<ul>
+							<li><strong>Cover theorem 1966:</strong> Let $\{x_1, x_2...x_P\}$ be vector in $\mathbb{R}^N$, the number of distinct dichotomies that can be realized by a plane is: $C(N, P) = 2\sum_{k=0}^{N-1}(_{k}^{P-1})$</li>
+						</ul>
+					</div>
+					<div class="half">
+						<img height="300" data-src="reveal.js-3.0.0/images/cover.png">
+					</div>
+					<ul>
+						<li class="fragment">A complex pattern-classification problem, cast in a high-dimensional space nonlinearly, is more likely to be linearly separable than in a low-dimensional space.</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Idea: Basis Function</h3>
+					<div class="half">
+						<ul>
+							<li> $f(x, w) = \sum_{i=1}^mw_ih_i(x)$</li>
+							<li>Basis function may be sample-centered (kernels) or centered in areas of high sample density (using an unsupervised clustering algorithm)</li>
+							<li>An interesting type of basis function is $\sigma(U^{T}x) = \frac{1}{1+\exp(-U^{T}x)}$ (<span style="color:red">single hidden layer neural network</span>)</li>
+						</ul>
+					</div>
+					<div class="half">
+						<img data-src="reveal.js-3.0.0/images/bump.png">
+						<img data-src="reveal.js-3.0.0/images/RBF.png">
+					</div>
+				</section>
+				<section>
+					<ul>
+						<li><strong>Universal approximation theorem (Cybenko 1989):</strong></li> Let $\phi$ be bounded and monotonically-increasing continuous function. The space of function the form
+						$$ f(x) = \sum_{i=1}^Nv_i\phi_i(w_i^Tx + b_i), N \in \mathbb{I}, v_i, b_i \in \mathbb{R}, w_i \in \mathbb{R}^m$$
+						are dense in the space of continuous function on $[0, 1]^m$
+						<li class="fragment"><strong>Theoritician's dilemma:</strong> We can approximate any function as close as we want with shallow architecture. Why we need deep ones?</li>
+					</ul>
+				</section>
+				<section>
+					<ul>
+						<li><strong>N-bit parity</strong>: requires N-1 XOR gates in a tree of $\log(N)$ where it requires an exponential gates if we restrict ourselves to 2 layers.</li>
+					</ul>
+					<img data-src="reveal.js-3.0.0/images/N_parity_XOR.png">
+					<img data-src="reveal.js-3.0.0/images/DNF.png">
+				</section>
+				<section>
+					<h3>Multilayer perceptron</h3>
+					<div class="half">
+						<p><strong>Neural network with L hidden layers</strong></p>
+						<ul>
+							<li>layer pre-activation for $k>0$ ($h^{(0)}(x)=x$): 
+								$$ a^{(k)}(x) = b^{(k)} + W^{(k)}h^{(k-1)}(x)$$</li>
+							<li>hidden layer activation ($k \in \{1,..L\}$):
+							$$ h^{(k)}(x) = g(a^{(k)}(x))$$ </li>
+							<li>output layer activation (k=L+1):
+							$$ h^{(L+1)}(x) = o(a^{(L+1)}(x)) = f(x)$$</li>
+						</ul>
+					</div>
+					<div class="half">
+						<img width="400" data-src="reveal.js-3.0.0/images/mlp.png">
+					</div>
+				</section>
+				<section>
+					<h3>Biological inspiration</h3>
+					<img height="250" data-src="reveal.js-3.0.0/images/neuron.png">
+					<img height="250" data-src="reveal.js-3.0.0/images/2_layers.png">
+				</section>
+				<section>
+					<h3>Activation function</h3>
+					<div class="half">
+						<ul>
+							<li>sigmoid function: $g(x) = \frac{1}{1+\exp(-x)}$</li>
+							<li>Tanh function: $g(x) = \tanh(x) = \frac{\exp(x)-\exp(-x)}{\exp(x)+\exp(-x)}$</li>
+							<li>ReLu (rectified linear unit)function: $g(x) = max(x, 0)$</li>
+						</ul>
+					</div>
+					<div class="half">
+						<img height="150" data-src="reveal.js-3.0.0/images/sigmoid.png">
+						<img height="150" data-src="reveal.js-3.0.0/images/tanh.png">
+						<img height="150" data-src="reveal.js-3.0.0/images/reLu.png">
+					</div>
+					We use the softmax activation function at the output layer:
+					$$o(a) = \text{softmax}(a) = [\frac{\exp(a_1)}{\sum_c \exp(a_c)},..\frac{\exp(a_C)}{\sum_c \exp(a_c)} ]$$
+				</section>
+				<section>
+					<h3>Gradient descent algorithm</h3>
+						<ul>
+							<li>initialize $\theta, (\theta = \{W^{(1)}, b^{(1)},.. W^{(L+1)}, b^{(L+1)}\} )$</li>
+							<li>for N iterations:
+							<ul>
+								<li>for each example $(x^{(t)}, y^{(t)})$
+									$$ \delta = - \nabla_{\theta}l(f(x^{(t)}; \theta), y^{(t)})$$
+									$$ \theta = \theta + \eta \delta $$</li>
+							</ul>
+							</li>
+							<li>For classification, the loss function is the negative log-likelihood $f(x)_c = p(y=c|x)$ (sometimes referred to as cross-entropy):
+								$$l(f(x), y) = - \sum_c 1_{(y=c)}\log f(x)_c = - \log f(x)_y $$</li>
+						</ul>
+				</section>
+				<section>
+					<h3>Gradient computation</h3>
+					<div class="half">
+						<strong>Loss gradient at output pre_activation:</strong>
+						<ul>
+							<li>Partial derivative:
+								$$\frac{\partial}{\partial a^{(L+1)}(x)_c}- \log f(x)_y$$
+								$$= - (1_{(y=c)} - f(x)_c)$$</li>
+							<li>Gradient:
+								$$\nabla_{a^{(L+1)}(x)_c} (-\log f(x)_y)$$
+								$$= - (e(y) - f(x))$$</li>
+						</ul>
+					</div>
+					<div class="half">
+						<img data-src="reveal.js-3.0.0/images/pre_activation_gradient.png">
+					</div>
+				</section>
+				<section>
+					<h3>Gradient computation</h3>
+					<div class="half">
+						<strong>Chain rule</strong>
+						<ul>
+							<li>if a function p(a) can be written as a function of intermediate results $q_i(a)$ then we have: 
+								$$ \frac{\partial p(a)}{\partial a} = \sum_i \frac{\partial p(a)}{\partial q_i(a)} \frac{\partial q_i(a)}{\partial a} $$</li>
+						</ul>
+					</div>
+					<div class="half">
+						<img data-src="reveal.js-3.0.0/images/hidden_layer_gradient.png">
+					</div>
+				</section>
+				<section>
+					<h3>Gradient computation</h3>
+					<strong>Loss gradient at hidden layers</strong>: let's apply chain rule
+					<ul>
+						<li>Partial derivative: 
+							$$ \frac{\partial}{\partial h^{(k)}(x)_j} -\log f(x)_y = 
+							\sum_i \frac{\partial - \log f(x)_y}{\partial a^{(k+1)}(x)_i} \frac{\partial a^{(k+1)}(x)_i}{\partial h^{(k)}(x)_j}$$</li>
+						<li>Gradient: 
+							$$\nabla_{h^{(k)}(x)} - \log f(x)_y = (W^{(k+1)})^T	(\nabla_{a^{(k+1)}(x)} - \log f(x)_y)$$</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Gradient computation</h3>
+					<div class="half">
+						<strong>Loss gradient at hidden layers pre-activation</strong>
+						<!-- <ul> -->
+							<li>Partial derivative:
+							\begin{align}
+							&\frac{\partial}{\partial a^{(k)}(x)_j} - \log f(x)_y\\
+							 &= \frac{\partial - \log f(x)_y}{\partial h^{(k)}(x)_j}  
+							\frac{\partial h^{(k)}(x)_j}{\partial a^{(k)}(x)_j}\\
+							 &= \frac{\partial - \log f(x)_y}{\partial h^{(k)}(x)_j} g'(a^{(k)}(x)_j)
+							 \end{align}</li>
+							<li>Gradient:</li>
+							$$\nabla_{a^{(k)}} - \log f(x)_y = (\nabla_{h^{(k)}(x)}-\log f(x)_y) . [..g'(a^{(k)}(x)_j..]$$
+						<!-- </ul> -->
+					</div>
+					<div class="half">
+						<img width="350" data-src="reveal.js-3.0.0/images/hidden_pre_activation.png">
+					</div>
+				</section>
+				<section>
+					<h3>Gradient computation</h3>
+					<strong>Loss gradient at parameters</strong>
+					<ul>
+						<li>Partial derivative:
+						$$\frac{\partial}{\partial W^{(k)}_{i,j}} - \log f(x)_y
+						 = \frac{\partial - \log f(x)_y}{\partial a^{(k)}(x)_i}  
+						\frac{\partial a^{(k)}(x)_i}{\partial W^{(k)}_{i,j}}$$
+						$$\frac{\partial}{\partial b^{(k)}_{i}} - \log f(x)_y 
+						= \frac{\partial - \log f(x)_y}{\partial a^{(k)}(x)_i}  
+						\frac{\partial a^{(k)}(x)_i}{\partial b^{(k)}_i}$$</li>
+						<li>Gradient:
+							$$\nabla_{W^{(k)}}-\log f(x)_y = (\nabla_{a^{(k)}}-\log f(x)_y)h_{(k-1)}(x)^T$$
+							$$\nabla_{b^{(k)}}-\log f(x)_y = \nabla_{a^{(k)}}-\log f(x)_y$$</li>
+
+					</ul>
+				</section>
+				<section>
+					<h3>Backpropagation algorithm</h3>
+					<ul>
+						<li>compute output gradient</li>
+						$$\nabla_{a^{(L+1)}(x)_c} (-\log f(x)_y) = - (e(y) - f(x))$$
+						<li>for k from L+1 to 1:
+							<ul>
+								<li>compute gradient of hidden layer parameter:
+								$$\nabla_{W^{(k)}}-\log f(x)_y = (\nabla_{a^{(k)}}-\log f(x)_y)h_{(k-1)}(x)^T$$
+							$$\nabla_{b^{(k)}}-\log f(x)_y = \nabla_{a^{(k)}}-\log f(x)_y$$</li>
+								<li>compute gradient of hidden layer below:
+									$$\nabla_{h^{(k-1)}(x)} - \log f(x)_y = (W^{(k)})^T \nabla_{a^{(k)}(x)} - \log f(x)_y$$
+									\begin{align}
+									\nabla_{a^{(k-1)}} - \log f(x)_y &= (\nabla_{h^{(k-1)}(x)}-\log f(x)_y) \\
+									&. [..g'(a^{(k-1)}(x)_j..]
+									\end{align}
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Gradient descent</h3>
+					<ul>
+						<li>Batch gradient descent: we look at all the examples at the same time. It is not efficient when we have a massive dataset</li>
+						<li>Stochastic gradient descent: use one random example. It avoids the whole data summations</li>
+						<li>Mini-batch gradient descent: could be even more faster, it uses m examples in each iteration</li>
+					</ul>
+					<img height="300" data-src="reveal.js-3.0.0/images/SGD.png">
+					<img height="300" data-src="reveal.js-3.0.0/images/GD.png">
+				</section>
+				<section>
+					<h3>Gradient descent</h3>
+					<ul>
+						<li>We recall the gradient descent update: $x_{t+1} = x_t + \delta_t, \text{where } \delta_t = -\eta g_t$</li>
+						<li>Momentum: accelerates progress along dimensions in which gradient consistently point in the same direction and to slow progress along dimensions where the sign of the gradient continues to change.
+							$$ \delta_t = \rho \delta_{t-1} - \eta g_t$$</li>
+						<li>Adagrad: large gradients have smaller learning rates and small gradients have large learning rates:
+							$$ \delta_t = \frac{\eta}{\sqrt{\sum_{\tau=1}^t g_{\tau}^2}g_t}$$</li>
+						<li>Other approches: Adam, AdaDelta and RMSProp</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Regularization: Dropout</h3>
+					<small>A Simple Way to Prevent Neural Networks from Overfitting</small>
+					<img height="300" data-src="reveal.js-3.0.0/images/dropout.png">
+					<img height="200" data-src="reveal.js-3.0.0/images/dropout_train.png">
+				</section>
+				<section>
+					<h3>Computer vision</h3>
+					<div class="half">
+						Classification task example:
+						
+						<img height="270" data-src="reveal.js-3.0.0/images/chat.png">
+						<img height="270" data-src="reveal.js-3.0.0/images/localization.png">
+					</div>
+					<div class="half">
+						challenges:
+						<ul>
+							<li>View point variation</li>
+							<li>Scale variation</li>
+							<li>Illumination conditions</li>
+							<li>Deformation</li>
+							<li>...</li>
+						</ul>
+						<img data-src="reveal.js-3.0.0/images/def_img.png">
+					</div>
+				</section>
+				<section>
+					<h3>Traditional approaches</h3>
+					<small>Maually designed features are often over-specified, incomplete and take a long time to design and validate.</small>
+					<img data-src="reveal.js-3.0.0/images/traditional_vision.png">
+					<small>Example of descriptor: Scale-Invariant Feature Transform and vector quantization</small>
+					<img data-src="reveal.js-3.0.0/images/sift.png">
+				</section>
+				<section>
+					<h3>End to end training</h3>
+					<img data-src="reveal.js-3.0.0/images/end_to_end.png">
+					<img data-src="reveal.js-3.0.0/images/convnet.jpeg">
+				</section>
+				<section>
+					<h3>Convolutional neural network (Convnet) layers</h3>
+					<small>
+						<ul>
+							<li><strong>Input layer</strong>: holds the raw pixel values of the image. 3 dimensions: width, height, and depth (color channels).</li>
+							<li class="fragment"><strong>Convolutional layer</strong>: computes the output of neurons that are connected to local regions in the input, each computing a dot product between their weights and the region they are connected to in the input volume.</li>
+							<li class="fragment"><strong>ReLu layer</strong>: applies an elementwise activation function.</li>
+							<li class="fragment"><strong>Pooling layer</strong>: performs a downsampling operation along the spatial dimensions (width, height).</li>
+							<li class="fragment"><strong>Fully connected layer</strong>: computes the class scores</li>
+						</ul>
+					</small>
+					<img height="350" data-src="reveal.js-3.0.0/images/convnet_layers.png">
+				</section>
+				<section>
+					<h3>Convolution</h3>
+					<img height="600" data-src="reveal.js-3.0.0/images/conv1.png">
+				</section>
+				<section>
+					<h3>Convolution</h3>
+					<img height="600" data-src="reveal.js-3.0.0/images/conv2.png">
+				</section>
+				<section>
+					<h3>ImageNet challenge</h3>
+					14 million images gathered from internet and labeled via Amazon	Truk, 20k classes.
+					<img data-src="reveal.js-3.0.0/images/imagenet.jpg">
+				</section>
+				<section>
+					<h3>ImageNet challenge</h3>
+					<ul>
+						<li>Winner: SuperVision team: Alex Krizhevsky,Ilya Sutskever,Geoffrey Hinton, University of Toronto.</li>
+						<li>Next best model is not convnet</li>
+					</ul>
+					<img height="400" data-src="reveal.js-3.0.0/images/imagenet_result.png">
+				</section>
+				<section>
+					<h3>AlexNet architecture</h3>
+					<ul>
+						<li>7 layers, 650 000 neurons, 60 000 000 parameters</li>
+						<li>Trained on 2 GPUs in two weeks</li>
+						<li>Dropout with 0.5 probability</li>
+						<li>In order to avoid overfitting, they trained on 224x224 patches extracted randomly from 256x256 images, and also their horizontal reflections</li>
+					</ul>
+					<img data-src="reveal.js-3.0.0/images/alexnet.png">
+				</section>
+				<section>
+					<h3>Convnet visualizing</h3>
+					<div class="half">
+						<ul >
+							<li>Use deconvolution to map activations at higher layers back to in the input</li>
+							<li>same operations as Convnet but in reverse:
+								<ul>
+									<li>Unpool features maps</li>
+									<li>Rectify unpooled maps with the same non-linearity</li>
+									<li>Convolve rectified unpooled maps with transposed learned filters</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="half">
+						<img class="half" width="700" data-src="reveal.js-3.0.0/images/deconvnet.png">
+					</div>
+				</section>
+				<section>
+					<h3>Convnet visualizing</h3>
+					<ul>
+						<li>For a given feature map, we show the top 9 activations. Projecting each separately down to pixel space reveals the different structures that excite a given feature map.</li>
+					 	<li>Alongside these visualizations we show the corresponding image patches.</li>
+					</ul>
+					<img data-src="reveal.js-3.0.0/images/layer_1_2.png">
+				</section>
+				<section>
+					<h3>Convnet visualizing</h3>
+					<img height="620" data-src="reveal.js-3.0.0/images/layer_3_5.png">
+				</section>
+				<section>
+					<h3>Deep learning in natural language processing</h3>
+					<ul>
+						<li>Goal: for computers to process or "understand" natural language in order to perform tasks that are useful.</li>
+						<li>Applications range from simple to complex:
+							<ul>
+								<li>Spell checking, keyword search, finding synonyms</li>
+								<li>Extracting information from websites such as product price, dates,..</li>
+								<li>Classifying, reading level of school texts, positive/negative sentiment.</li>
+								<li>Machine translation</li>
+								<li>Question Answering</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Vector Representations of Words</h3>
+					<ul>
+						<li>Image and audio processing system high-dimensional datasets encoded as vectors of the individual pixel-intensities or power spectral density coefficients</li>
+						<li>Natural language processing systems traditionally treat words as discrete atomic symbols
+							<ul>
+								<li>Every word is orthogonal to one another</li>
+								<li>$w_{mother}. w_{father} = 0$</li>
+							</ul>
+						</li>
+
+					</ul>
+					<img height="200" data-src="reveal.js-3.0.0/images/why_word2vec.png">
+				</section>
+				<section>
+					<h3>Word embedding</h3>
+					<ul>
+						<li>The Distributional Hypothesis in linguistics: words that are used and occur in the same contexts tend to purport similar meanings</li>
+						<li>Word embedding represent words in a contiuous vector space where semantically similar words are mapped to nearby points.</li>
+					</ul>
+					<img height="300" data-src="reveal.js-3.0.0/images/word_space.png">
+				</section>
+				<section>
+					<h3>Word embedding</h3>
+					<p>Count based methods</p>
+					<ul>
+						<li>We compute the statistics of how some words co-occurs with its neighbor words in a large text corpus.</li>
+						<li>Then we map these count-statistics down to a small, dense vector for each word.</li>
+					</ul>
+					<img data-src="reveal.js-3.0.0/images/LSA.png">
+				</section>
+				<section>
+					<h3>Word embedding</h3>
+					<p>Predictive Method: Word2vec (Mikolov, 2013)</p>
+					<small>
+						<ul>
+							<li><strong>Continuous Bag Of Word (CBOW)</strong> architecture predicts the current word based on the context.</li>
+							<li><strong>Skip-gram</strong> predicts surrounding words given the current word.</li>
+							<li>Skip-gram treats each context-target pair as a new observation while CBOW smoothes over a lot of the distributional information</li>
+						</ul>
+					</small>
+					<img height="400" data-src="reveal.js-3.0.0/images/cbow.png">
+
+				</section>
+				<section>
+					<h3>Skip-gram</h3>
+					<div class="half">
+						<ul>
+							<li>Let's $W$ be embedding matrix and $W'$ the output weight matrix</li>
+							<li>Let w a word is hot-one encoded by x such as $x_k=1, x_k=0 \text{ for } k' \neq k$, then, the hidden layer $$h = x^TW = W_{(k,.)} = v_w$$</li>
+							<li>If $v'_{w_j}$ is the j-th column of the matrix $W'$, the output pre-activation is:
+								$$ u_j= (v'_{w_j})^T h$$</li>
+							
+						</ul>
+					</div>
+					<div class="half">
+						<img height="500" data-src="reveal.js-3.0.0/images/skip_gram.png">
+					</div>
+				</section>
+				<section>
+					<!-- <p>Skip-gram</p> -->
+					<ul>
+						<li>The probability of a context word $w_t$ (target) given the context's center $w_c$ is:
+							\begin{align} P(w_t| w_c) &= \text{softmax}(u_t) \\
+							&= \frac{\exp((v'_{w_t})^Tv_{w_c})}{\sum_{\text{word w in Vocab}} \exp((v'_{w})^Tv_{w_c})}
+							\end{align}
+						</li>
+						<li class="fragment">The negative log-likelihood to minimize (very expensive to compute): 
+						\begin{align}
+						-\log P(w_t| w_c) &= - (v'_{w_t})^Tv_w \\
+						&+ \log\big(\sum_{\text{word w in Vocab}} \exp((v'_{w})^Tv_{w_c})\big)
+						\end{align}</li>
+						<li class="fragment">Negative sampling: word2vec is instead trained using a binary classification objective:
+						\begin{align} 
+						 loss_{neg} &= -\log P(D=1| v'_{w_t} v_{w_c}) \\
+						 &- k\mathbb{E}_{w \sim P_{noise}}\log P(D=0|v'_{w}, v_{w_c})
+						 \end{align}</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Linguistic regularities in the word space</h3>
+					<div class="half">
+					 <table>
+						<thead>
+							<tr>
+								<th>Expression</th>
+								<th>Nearest token</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Paris - France + Italy</td>
+								<td>Rome</td>
+							</tr>
+							<tr>
+								<td>bigger - big + cold</td>
+								<td>colder</td>
+							</tr>
+							<tr>
+								<td>sushi - Japan + Germany</td>
+								<td>bratwurst</td>
+							</tr>
+							<tr>
+								<td>Windows - Microsoft + Google</td>
+								<td>Android</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="half">
+					<img data-src="reveal.js-3.0.0/images/word_space_reg.png">
+				</div>
+				</section>
+				<section>
+					<i>“We set out to conduct this study [on context-counting vs.context-predicting] because we were annoyed by the triumphalist overtones often surrounding predict models, despite the almost complete lack of a proper comparison to count vectors. Our secret wish was to discover that it is all hype, and count vectors are far superior to their predictive counterparts. [...] Instead we found that the predict models are so good that, while the triumphalist overtones still sound excessive, there are very good reasons to switch to the new architecture.”</i>
+					<p>Baroni et al., “Don’t count, predict! A systematic comparision of context-counting vs. context-predicting semantic vectors”, ACL 2014</p>
+				</section>
+				<section>
+					<h3>Language Model</h3>
+					<ul>
+						<li>A language model computes a probability for a sequence of words: $p(w_1,...,w_T)$</li>
+						<li>Useful for machine translation</li>
+						<ul>
+							<li>Word ordering: p(the cat is small) > p(small the cat is)</li>
+							<li>Word choice: p(walking home after school) > p(walking house after school)</li>
+						</ul>
+					</ul>
+				</section>
+				<section>
+					<h3>Traditional language model</h3>
+					<ul>
+						<li>Probability is usually condi3oned on window of n previous words: Markov assumption:
+							\begin{align}
+							&p(w_1,...,w_T) = p(w_1)\prod_{i=1}^m p(w_i|w_1,...,w_{i-1}) \\
+							& \simeq p(w_1)\prod_{i=1}^m p(w_i|w_{i-(n-1)},...,w_{i-1})
+							\end{align} </li>
+						<li class="fragment">Estimate probability by counting:
+							$p(w_2|w_1) = \frac{\text{count}(w_1, w_2)}{\text{count}(w_1)}$
+							$$p(w_3| w_2, w_1) = \frac{\text{count}(w_1, w_2. w_3)}{\text{count}(w_1, w_2)}$$</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Recurrent neural network</h3>
+					<ul>
+						<li>Given list of word vectors: $x_1, x_2,...,x_T$</li>
+						<li>$h_t = \text{sigmoid}(W^{(hh)} h_{t-1} + W^{(hx)}xt)$</li>
+						<li>$y_t = \text{softmax}(W^{(yh)} h_t) $</li>
+					</ul>
+					<img height="400"data-src="reveal.js-3.0.0/images/rnn.png">
+				</section>
+				<section>
+					<h3>RNN training</h3>
+					<ul>
+						<li >Let's take a simpler RNN
+							$$h_t = Wf(h_{t-1}) + W^{(hx)}x_t$$
+							$$y_t = W^{(yh)}f(h_t)$$
+						</li>
+						<li class="fragment">Total error is the sum of each error at time steps t: 
+							$$\frac{\partial E}{\partial W} = \sum_{t=1}^T\frac{\partial E_t}{\partial W}$$</li>
+						<li class="fragment">Let's apply Chain rule: $\frac{\partial E_t}{\partial W} = \sum_{k=1}^t 
+							\frac{\partial E_t}{\partial y_t} \frac{\partial y_t}{\partial h_t} 
+							\frac{\partial h_t}{\partial h_k} \frac{\partial h_k}{\partial W}$ </li>
+					</ul>
+				</section>
+				<section>
+					<h3>RNN training</h3>
+					<ul>
+						<li>$\frac{\partial h_t}{\partial h_k} = \prod_{i=k+1}^{t} \frac{\partial h_i}{\partial h_{i-1}}$</li>
+						<li class="fragment">$\text{As } h_i = Wf(h_{i-1}) + W^{(hx)}x_i$, $$\frac{\partial h_i}{\partial h_{i-1}} = W^T\text{diag}(f'(h_{i-1}))$$
+							</li>
+						<li class="fragment">As $f'$ is bounded, $||\frac{\partial h_i}{\partial h_{i-1}}|| \leq \|W\| \| \text{diag}(f'(h_{i-1})\| \leq \beta$</li>
+						<li class="fragment">$\|\frac{\partial h_t}{\partial h_k}\| \leq \prod_{i=k+1}^{t} ||\frac{\partial h_i}{\partial h_{i-1}}|| \leq \beta^{(t-k)}$</li>
+						<li class="fragment">This can become very high or very small => Vanishing or exploding gradient</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Trick for exploding gradient: clipping trick</h3>
+					<img data-src="reveal.js-3.0.0/images/clip_trick.png">
+				</section>
+				<section>
+					<h3>Long Short Term Memory network</h3>
+					<img height="200" data-src="reveal.js-3.0.0/images/LSTM3-SimpleRNN.png">
+					<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-chain.png">
+				</section>
+				<section>
+					<div class="half">
+						<p>forget gate</p>
+						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-f.png">
+						<p>input gate</p>
+						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-i.png">
+					</div>
+					<div class="half">
+						<p>Memory cell</p>
+						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-C.png">
+						<p>output gate</p>
+						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-o.png">
+					</div>
+				</section>
+				<section>
+					<h3>RNN results</h3>
+					<img height="300" data-src="reveal.js-3.0.0/images/rnn_baseline.png">
+					<p><i>"Extensions of recurrent neural network language model"</i> by Mikolov and al 2011</p>
+					<p>KN5 refers to Count-based language model with Kneser-Ney smoothing and 5-grams</p>
+				</section>
+				<section>
+					<h3>CONCLUSION</h3>
+					<ul>
+						<li>Deep learning provides a flexible «almost» universal learnable framework for representing world, visual and linguistic information.</li>
+						<li>It is very hard to train and a lot of hyperparameters to tuned.</li>
+						<li>It is as much about theory as about engineering.</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+
+		<script src="reveal.js-3.0.0/lib/js/head.min.js"></script>
+		<script src="reveal.js-3.0.0/js/reveal.js"></script>
+
+
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+				math: {
+					mathjax: 'reveal.js-3.0.0/MathJax-master/MathJax.js',
+        			config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+    			},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'reveal.js-3.0.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal.js-3.0.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js-3.0.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js-3.0.0/plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal.js-3.0.0/plugin/zoom-js/zoom.js', async: true },
+					{ src: 'reveal.js-3.0.0/plugin/notes/notes.js', async: true },
+					{ src: 'reveal.js-3.0.0/plugin/math/math.js', async: true },
+					// { src: 'plugin/mathjax/MathJax.js', async: true}
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
