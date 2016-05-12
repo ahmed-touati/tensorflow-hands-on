@@ -15,7 +15,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="reveal.js-3.0.0/css/reveal.css">
-		<link rel="stylesheet" href="reveal.js-3.0.0/css/theme/blood.css" id="theme">
+		<link rel="stylesheet" href="reveal.js-3.0.0/css/theme/white.css" id="theme">
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="reveal.js-3.0.0/lib/css/zenburn.css">
@@ -47,6 +47,28 @@
 					<img width="200" height="50" data-src="reveal.js-3.0.0/images/dil.png">
 				</section>
 				<section>
+					<h3>Success stories</h3>
+						<ul>
+							<li>Record performance
+								<ul>
+									<li>MNIST (1988, 2003, 2012)</li>
+									<li>ImageNet (since 2012) and Object Recognition</li>
+									<li>...</li>
+								</ul>
+							</li>
+							<li>Real applications
+								<ul>
+									<li>Check reading (AT&T Bell Labs, 1995 – 2005)</li>
+									<li>Optical character recognition (Microsoft OCR, 2000)</li>
+									<li>Cancer detection from medical images (NEC, 2010)</li>
+									<li>Object recognition (Google and Baidu’s photo taggers, 2013)</li>
+									<li>Speech recognition (Microsoft, Google, IBM switched in 2012)</li>
+									<li>Natural Language Processing (NEC 2010)</li>
+									<li>...</li>
+								</ul></li>
+						</ul>
+				</section>
+				<section>
 					<p>Plan</p>
 					<ol>
 						<li>Why deep learning? history and motivation</li>
@@ -55,6 +77,32 @@
 						<li>Natural language processing: recurrent neural network</li>
 
 					</ol>	
+				</section>
+				<section>
+					<h3>Historical waves of artificial neural networks</h3>
+					
+					<ul>
+						<li>Cybernetics in the 1940s-1960s with the developement of theories of biological learning and implementation of perceptron</li>
+						<li>Connectionism approach with back-propagation to train neural network with one or two hidden layer.</li>
+						<li>Deep learning since 2006.</li> 
+					</ul>
+					<img height="300" data-src="reveal.js-3.0.0/images/google_books.png">
+				</section>
+				<section>
+					<h3>Cybernetics (1948)</h3>
+					<img height="300" data-src="reveal.js-3.0.0/images/norbert_wiener.jpg">
+					<img height="300" data-src="reveal.js-3.0.0/images/cybernetics.png">
+					<ul>
+						<li>Cybernetics connects control (actions taken in hope of achieving goals) with communication (connection and information flow between the actor and the environment).</li>
+						<li>Systems achieve goals through iterative processes or “feedback” loops</li>
+					</ul>
+				</section>
+				<section>
+					<h3>McCulloch & Pitts (1943)</h3>
+					<img height="250" data-src="reveal.js-3.0.0/images/neuron.png">
+					<ul>
+						<li>A simplified neuron model: the Linear Threshold Unit.</li>
+					</ul>
 				</section>
 				<section>
 					<h3>Perceptron: first trained machine</h3>
@@ -81,6 +129,57 @@
 					</ul>
 				</section>
 				<section>
+					<h3>Quillian’s hierarchical propositional model (1968)</h3>
+					<img height="500" data-src="reveal.js-3.0.0/images/Quillian.png">
+				</section>
+				<section>
+					<h3>Connectionism</h3>
+					<ul>
+						<li>From psychological ideas of the XIXth and XXth centuries.</li>
+						<li>The central connectionist principle is that mental phenomena can be described by interconnected networks of simple and often uniform units.</li>
+						<li>Parallel Distributed Processing:
+							<ul>
+								<li>Neural representations are distributed.</li>
+								<li>Neural computation is parallel.</li>
+								<li>Processing units, connectivity, propagation rule, learning rule.</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section>
+					<ul>Rumelhart’s propositional network</ul>
+					<img height="600" width="700" data-src="reveal.js-3.0.0/images/Rumelhart.png">
+				</section>
+				<section>
+					<h3>Training Network</h3>
+					<ul>
+						<li>Replace threshold unit by sigmoid unit.</li>
+						<li>Collect training examples: 
+							$$(..(\text{Item}_{i}, \text{Relation}_{i}, \text{DesiredOutput}_i)..)$$</li>
+						<li>Form the mean squared error: 
+							$$ E = \sum_k(\text{DesiredOutput}(k) - \text{Output}(k))^2$$</li>
+						<li>Initialize with random weights and optimize by gradient descent.</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Activations</h3>
+					<img data-src="reveal.js-3.0.0/images/activation_epochs.png">
+				</section>
+				<section>
+					<h3>Representations</h3>
+					<img height="500" data-src="reveal.js-3.0.0/images/representation_epochs.png">
+				</section>
+				<section>
+					<h3>Representations</h3>
+					<div class="half">
+						<img height="400" data-src="reveal.js-3.0.0/images/representation_cluster.png">
+					</div>
+					<div class="half">
+						<img height="400" data-src="reveal.js-3.0.0/images/representation_pca.png">
+					</div>
+				</section>
+
+				<section>
 					<h3>Idea: Basis Function</h3>
 					<div class="half">
 						<ul>
@@ -90,7 +189,7 @@
 						</ul>
 					</div>
 					<div class="half">
-						<img data-src="reveal.js-3.0.0/images/bump.png">
+						<img height="300" width="400" data-src="reveal.js-3.0.0/images/rbf_kernel.png">
 						<img data-src="reveal.js-3.0.0/images/RBF.png">
 					</div>
 				</section>
@@ -103,11 +202,23 @@
 					</ul>
 				</section>
 				<section>
+					<h3>The need of depth</h3>
 					<ul>
 						<li><strong>N-bit parity</strong>: requires N-1 XOR gates in a tree of $\log(N)$ where it requires an exponential gates if we restrict ourselves to 2 layers.</li>
 					</ul>
 					<img data-src="reveal.js-3.0.0/images/N_parity_XOR.png">
 					<img data-src="reveal.js-3.0.0/images/DNF.png">
+				</section>
+				<section>
+					<h3>The need of depth</h3>
+					<div class="half">
+						<ul>
+							<li>A series of hidden layers extracts increasingly abstract features from the image.</li>
+							<li> the ﬁrst layer can easilyidentify edges, by comparing the brightness of neighboring pixels.</li>
+							<li> the second hidden layer can easily search for corners and extended contours, which are recognizable as collections of edges.</li>
+						</ul>
+					</div>
+						<img height="400" data-src="reveal.js-3.0.0/images/hierarchical.png">
 				</section>
 				<section>
 					<h3>Multilayer perceptron</h3>
@@ -125,11 +236,6 @@
 					<div class="half">
 						<img width="400" data-src="reveal.js-3.0.0/images/mlp.png">
 					</div>
-				</section>
-				<section>
-					<h3>Biological inspiration</h3>
-					<img height="250" data-src="reveal.js-3.0.0/images/neuron.png">
-					<img height="250" data-src="reveal.js-3.0.0/images/2_layers.png">
 				</section>
 				<section>
 					<h3>Activation function</h3>
@@ -172,7 +278,7 @@
 								$$\frac{\partial}{\partial a^{(L+1)}(x)_c}- \log f(x)_y$$
 								$$= - (1_{(y=c)} - f(x)_c)$$</li>
 							<li>Gradient:
-								$$\nabla_{a^{(L+1)}(x)_c} (-\log f(x)_y)$$
+								$$\nabla_{a^{(L+1)}(x)} (-\log f(x)_y)$$
 								$$= - (e(y) - f(x))$$</li>
 						</ul>
 					</div>
@@ -279,9 +385,27 @@
 						<li>Momentum: accelerates progress along dimensions in which gradient consistently point in the same direction and to slow progress along dimensions where the sign of the gradient continues to change.
 							$$ \delta_t = \rho \delta_{t-1} - \eta g_t$$</li>
 						<li>Adagrad: large gradients have smaller learning rates and small gradients have large learning rates:
-							$$ \delta_t = \frac{\eta}{\sqrt{\sum_{\tau=1}^t g_{\tau}^2}g_t}$$</li>
+							$$ \delta_t = \frac{\eta}{\sqrt{\sum_{\tau=1}^t g_{\tau}^2}}g_t$$</li>
 						<li>Other approches: Adam, AdaDelta and RMSProp</li>
 					</ul>
+				</section>
+				<section>
+					<h3>The mirage of convexity</h3>
+					<ul>
+						<li>Local minima dominate in low-D, but saddle points dominate in high-D</li>
+						<li>Most local minima are close to the bottom (global minimum error)</li>
+					</ul>
+					<img height="300" data-src="reveal.js-3.0.0/images/convexity.png">
+					<img height="300" data-src="reveal.js-3.0.0/images/saddle_point.png">
+				</section>
+				<section>
+					<h3>Saddle points during traning</h3>
+					<ul>
+					Oscillaing between two behaviors:
+					<li>Slowly approaching a saddle point.</li>
+					<li>Escaping it</li>
+					</ul>
+					<img height="400" data-src="reveal.js-3.0.0/images/saddle_training.png">
 				</section>
 				<section>
 					<h3>Regularization: Dropout</h3>
@@ -310,6 +434,44 @@
 					</div>
 				</section>
 				<section>
+					<h3>Speed of processing in the human visual system</h3>
+					<img height="500" data-src="reveal.js-3.0.0/images/Thorpe.png">
+				</section>
+				<section>
+					<h3>Hubel & Wiesel (1962)</h3>
+					<ul>
+						Biological insights:
+						<li>Simple cells detect local features</li>
+						<li>Complex cells pool local features in a retinotopic neighborhood</li>
+					</ul>
+					<img height="300" data-src="reveal.js-3.0.0/images/Hubel.png">
+					<img height="300" data-src="reveal.js-3.0.0/images/hubel_experiment.jpg">
+				</section>
+				<section>
+					<h3>The Neocognitron</h3>
+					<img height="500" data-src="reveal.js-3.0.0/images/neocognitron.png">
+				</section>
+				<section>
+					<h3>Local connexions</h3>
+					<img height="500" data-src="reveal.js-3.0.0/images/local_connexion.png">
+				</section>
+				<section>
+					<h3>Convolution</h3>
+					<img height="500" data-src="reveal.js-3.0.0/images/convolution.png">
+				</section>
+				<section>
+					<h3>Multiple convolution</h3>
+					<img height="500" data-src="reveal.js-3.0.0/images/multiple_convolution.png">
+				</section>
+				<section>
+					<h3>Convolution</h3>
+					<img height="600" data-src="reveal.js-3.0.0/images/conv1.png">
+				</section>
+				<section>
+					<h3>Convolution</h3>
+					<img height="600" data-src="reveal.js-3.0.0/images/conv2.png">
+				</section>
+				<section>
 					<h3>Traditional approaches</h3>
 					<small>Maually designed features are often over-specified, incomplete and take a long time to design and validate.</small>
 					<img data-src="reveal.js-3.0.0/images/traditional_vision.png">
@@ -333,14 +495,6 @@
 						</ul>
 					</small>
 					<img height="350" data-src="reveal.js-3.0.0/images/convnet_layers.png">
-				</section>
-				<section>
-					<h3>Convolution</h3>
-					<img height="600" data-src="reveal.js-3.0.0/images/conv1.png">
-				</section>
-				<section>
-					<h3>Convolution</h3>
-					<img height="600" data-src="reveal.js-3.0.0/images/conv2.png">
 				</section>
 				<section>
 					<h3>ImageNet challenge</h3>
