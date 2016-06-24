@@ -28,6 +28,14 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js-3.0.0/css/print/pdf.css' : 'reveal.js-3.0.0/css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+		<style>
+		html .reveal td  {
+			vertical-align: middle !important;
+		}
+		.reveal section img {
+			border :0
+		}
+		</style>
 
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
@@ -119,13 +127,27 @@
 					<div class="half">
 						<ul>
 							<li><strong>Cover theorem 1966:</strong> Let $\{x_1, x_2...x_P\}$ be vector in $\mathbb{R}^N$, the number of distinct dichotomies that can be realized by a plane is: $C(N, P) = 2\sum_{k=0}^{N-1}(_{k}^{P-1})$</li>
+							<!-- <li>A complex pattern-classification problem, cast in a high-dimensional space nonlinearly, is more likely to be linearly separable than in a low-dimensional space.</li> -->
+							<li>Abandon perceptrons and other analog computers.</li>
+							<li>Develop symbolic computers and symbolic AI techniques.</li>
 						</ul>
+						
 					</div>
 					<div class="half">
-						<img height="300" data-src="reveal.js-3.0.0/images/cover.png">
+						<img height="250" data-src="reveal.js-3.0.0/images/cover.png">
+						<img height="300" data-src="reveal.js-3.0.0/images/perceptrons_book.jpg">
 					</div>
+				</section>
+				<section>
+					<h3>Symbolic AI</h3>
 					<ul>
-						<li class="fragment">A complex pattern-classification problem, cast in a high-dimensional space nonlinearly, is more likely to be linearly separable than in a low-dimensional space.</li>
+						<li>Developpement of knowledge-based system caoable of giving advice in paticular domain utilizing knowledge provided by human experts.</li>
+						<li>Tow main components:
+							<ul>
+								<li>Knowledge represented in a number of ways such as rules, frames and cases.</li>
+								<li>Inference engine which uses knowledge to arrive at conclusion.</li>
+							</ul>
+						</li>
 					</ul>
 				</section>
 				<section>
@@ -219,17 +241,48 @@
 						<img height="400" data-src="reveal.js-3.0.0/images/hierarchical.png">
 				</section>
 				<section>
+				<img>What does deep learning became very popular now?</img>
+					<small><ul>
+						<li>Deep learning has become more useful as the amount of available training data has increased.</li>
+						<li>Deep learning models have grown in size over time as computer hardware and software infrastructure for deep learning has improved (nvidia GPU, Google TPU).</li>
+					</ul></small>
+					<img height="500" data-src="reveal.js-3.0.0/images/imagenet.png">
+				</section>
+				<section>
+					<h3>Dataset Over Algorithm</h3>
+					<img data-src="reveal.js-3.0.0/images/dataset_over_algorithm.png">
+					<small>The average elapsed time between key algorithm proposals and corresponding advances was about 18 years, whereas the average elapsed time between key dataset availabilities and corresponding advances was less than 3 years, or about 6 times faster.</small>
+				</section>
+				<section>
+					<h3>Imagenet Large Scale Visual Recognition Challenge</h3>
+					<img data-src="reveal.js-3.0.0/images/imagenet_results.jpg">
+					<small>
+						Error rates on the imagenet dataset have fallen dramatically since the introduction of deep learning systems for classification and localization of objects in images.
+						<a href="http://image-net.org/challenges/LSVRC/2011/results">Imagenet 2011 results</a>,
+						<a href="http://image-net.org/challenges/LSVRC/2012/results">Imagenet 2012 results</a>,
+						<a href="http://image-net.org/challenges/LSVRC/2013/results">Imagenet 2013 results</a>,
+						<a href="http://image-net.org/challenges/LSVRC/2014/results">Imagenet 2014 results</a>,
+						<a href="http://image-net.org/challenges/LSVRC/2015/results">Imagenet 2015 results</a>.
+					</small>
+				</section>
+				<section>
+					<h3>Imagenet Large Scale Visual Recognition Challenge</h3>
+					<img data-src="reveal.js-3.0.0/images/imagenet_models.png">
+
+				</section>
+	
+				<section>
 					<h3>Multilayer perceptron</h3>
 					<div class="half">
 						<p><strong>Neural network with L hidden layers</strong></p>
-						<ul>
+						<small><ul>
 							<li>layer pre-activation for $k>0$ ($h^{(0)}(x)=x$): 
 								$$ a^{(k)}(x) = b^{(k)} + W^{(k)}h^{(k-1)}(x)$$</li>
 							<li>hidden layer activation ($k \in \{1,..L\}$):
 							$$ h^{(k)}(x) = g(a^{(k)}(x))$$ </li>
 							<li>output layer activation (k=L+1):
 							$$ h^{(L+1)}(x) = o(a^{(L+1)}(x)) = f(x)$$</li>
-						</ul>
+						</ul></small>
 					</div>
 					<div class="half">
 						<img width="400" data-src="reveal.js-3.0.0/images/mlp.png">
@@ -238,39 +291,48 @@
 				<section>
 					<h3>Activation function</h3>
 					<div class="half">
-						<ul>
-							<li>sigmoid function: $g(x) = \frac{1}{1+\exp(-x)}$</li>
-							<li>Tanh function: $g(x) = \tanh(x) = \frac{\exp(x)-\exp(-x)}{\exp(x)+\exp(-x)}$</li>
-							<li>ReLu (rectified linear unit)function: $g(x) = max(x, 0)$</li>
-						</ul>
+						<small><ul>
+							<li>sigmoid function: $$g(x) = \frac{1}{1+\exp(-x)}$$</li>
+							<li>Tanh function: $$g(x) = \tanh(x) = \frac{\exp(x)-\exp(-x)}{\exp(x)+\exp(-x)}$$</li>
+							<li>ReLu (rectified linear unit)function: $$g(x) = max(x, 0)$$</li>
+							<li>We use the softmax activation function at the output layer:
+					$$o(a) = \text{softmax}(a) = [\frac{\exp(a_1)}{\sum_c \exp(a_c)},..\frac{\exp(a_C)}{\sum_c \exp(a_c)} ]$$</li>
+						</ul></small>
 					</div>
 					<div class="half">
 						<img height="150" data-src="reveal.js-3.0.0/images/sigmoid.png">
+
 						<img height="150" data-src="reveal.js-3.0.0/images/tanh.png">
 						<img height="150" data-src="reveal.js-3.0.0/images/reLu.png">
 					</div>
-					We use the softmax activation function at the output layer:
-					$$o(a) = \text{softmax}(a) = [\frac{\exp(a_1)}{\sum_c \exp(a_c)},..\frac{\exp(a_C)}{\sum_c \exp(a_c)} ]$$
 				</section>
 				<section>
 					<h3>Gradient descent algorithm</h3>
+						<small>
 						<ul>
 							<li>initialize $\theta, (\theta = \{W^{(1)}, b^{(1)},.. W^{(L+1)}, b^{(L+1)}\} )$</li>
-							<li>for N iterations:
-							<ul>
-								<li>for each example $(x^{(t)}, y^{(t)})$
-									$$ \delta = - \nabla_{\theta}l(f(x^{(t)}; \theta), y^{(t)})$$
-									$$ \theta = \theta + \eta \delta $$</li>
-							</ul>
+							<li>for K iterations:
+									$$ \delta = - \frac{1}{N}\sum_{t \in \{1,..N\}}\nabla_{\theta}l(f(x^{(t)}; \theta), y^{(t)})$$
+									$$ \theta_{k+1} = \theta_k + \eta \delta $$
 							</li>
 							<li>For classification, the loss function is the negative log-likelihood $f(x)_c = p(y=c|x)$ (sometimes referred to as cross-entropy):
 								$$l(f(x), y) = - \sum_c 1_{(y=c)}\log f(x)_c = - \log f(x)_y $$</li>
 						</ul>
+					</small>
+				</section>
+				<section>
+					<h3>Backpropagation algorithm</h3>
+					<div class="half">
+						<img width="400" data-src="reveal.js-3.0.0/images/Rumelhart_paper_title.png">
+						Rumelhart and al 1986: First time back-propagation became popular
+					</div>
+						<img width="400" data-src="reveal.js-3.0.0/images/Rumelhart_back_prop.png">
 				</section>
 				<section>
 					<h3>Gradient computation</h3>
 					<div class="half">
-						<strong>Loss gradient at output pre_activation:</strong>
+						<p><strong>Loss gradient at output pre-activation:</strong></p>
+						<small>
 						<ul>
 							<li>Partial derivative:
 								$$\frac{\partial}{\partial a^{(L+1)}(x)_c}- \log f(x)_y$$
@@ -279,6 +341,7 @@
 								$$\nabla_{a^{(L+1)}(x)} (-\log f(x)_y)$$
 								$$= - (e(y) - f(x))$$</li>
 						</ul>
+					</small>
 					</div>
 					<div class="half">
 						<img data-src="reveal.js-3.0.0/images/pre_activation_gradient.png">
@@ -288,10 +351,13 @@
 					<h3>Gradient computation</h3>
 					<div class="half">
 						<strong>Chain rule</strong>
+						<small>
 						<ul>
 							<li>if a function p(a) can be written as a function of intermediate results $q_i(a)$ then we have: 
 								$$ \frac{\partial p(a)}{\partial a} = \sum_i \frac{\partial p(a)}{\partial q_i(a)} \frac{\partial q_i(a)}{\partial a} $$</li>
 						</ul>
+					</small>
+					<img data-src="reveal.js-3.0.0/images/chain_rule.png">
 					</div>
 					<div class="half">
 						<img data-src="reveal.js-3.0.0/images/hidden_layer_gradient.png">
@@ -300,19 +366,21 @@
 				<section>
 					<h3>Gradient computation</h3>
 					<strong>Loss gradient at hidden layers</strong>: let's apply chain rule
-					<ul>
+					<small><ul>
 						<li>Partial derivative: 
 							$$ \frac{\partial}{\partial h^{(k)}(x)_j} -\log f(x)_y = 
 							\sum_i \frac{\partial - \log f(x)_y}{\partial a^{(k+1)}(x)_i} \frac{\partial a^{(k+1)}(x)_i}{\partial h^{(k)}(x)_j}$$</li>
 						<li>Gradient: 
 							$$\nabla_{h^{(k)}(x)} - \log f(x)_y = (W^{(k+1)})^T	(\nabla_{a^{(k+1)}(x)} - \log f(x)_y)$$</li>
-					</ul>
+					</ul></small>
 				</section>
 				<section>
 					<h3>Gradient computation</h3>
 					<div class="half">
-						<strong>Loss gradient at hidden layers pre-activation</strong>
+						<p><strong>Loss gradient at hidden layers pre-activation</strong></p>
 						<!-- <ul> -->
+						<small>
+							<ul>
 							<li>Partial derivative:
 							\begin{align}
 							&\frac{\partial}{\partial a^{(k)}(x)_j} - \log f(x)_y\\
@@ -322,6 +390,7 @@
 							 \end{align}</li>
 							<li>Gradient:</li>
 							$$\nabla_{a^{(k)}} - \log f(x)_y = (\nabla_{h^{(k)}(x)}-\log f(x)_y) . [..g'(a^{(k)}(x)_j..]$$
+						</ul></small>
 						<!-- </ul> -->
 					</div>
 					<div class="half">
@@ -330,8 +399,8 @@
 				</section>
 				<section>
 					<h3>Gradient computation</h3>
-					<strong>Loss gradient at parameters</strong>
-					<ul>
+					<p><strong>Loss gradient at parameters</strong></p>
+					<small><ul>
 						<li>Partial derivative:
 						$$\frac{\partial}{\partial W^{(k)}_{i,j}} - \log f(x)_y
 						 = \frac{\partial - \log f(x)_y}{\partial a^{(k)}(x)_i}  
@@ -343,19 +412,19 @@
 							$$\nabla_{W^{(k)}}-\log f(x)_y = (\nabla_{a^{(k)}}-\log f(x)_y)h_{(k-1)}(x)^T$$
 							$$\nabla_{b^{(k)}}-\log f(x)_y = \nabla_{a^{(k)}}-\log f(x)_y$$</li>
 
-					</ul>
+					</ul></small>
 				</section>
 				<section>
 					<h3>Backpropagation algorithm</h3>
-					<ul>
-						<li>compute output gradient</li>
+					<small><ul>
+						<li >compute output gradient</li>
 						$$\nabla_{a^{(L+1)}(x)_c} (-\log f(x)_y) = - (e(y) - f(x))$$
-						<li>for k from L+1 to 1:
+						<li class="fragment">for k from L+1 to 1:
 							<ul>
 								<li>compute gradient of hidden layer parameter:
 								$$\nabla_{W^{(k)}}-\log f(x)_y = (\nabla_{a^{(k)}}-\log f(x)_y)h_{(k-1)}(x)^T$$
 							$$\nabla_{b^{(k)}}-\log f(x)_y = \nabla_{a^{(k)}}-\log f(x)_y$$</li>
-								<li>compute gradient of hidden layer below:
+								<li class="fragment">compute gradient of hidden layer below:
 									$$\nabla_{h^{(k-1)}(x)} - \log f(x)_y = (W^{(k)})^T \nabla_{a^{(k)}(x)} - \log f(x)_y$$
 									\begin{align}
 									\nabla_{a^{(k-1)}} - \log f(x)_y &= (\nabla_{h^{(k-1)}(x)}-\log f(x)_y) \\
@@ -364,45 +433,165 @@
 								</li>
 							</ul>
 						</li>
-					</ul>
+					</ul></small>
 				</section>
-				<section>
+				<!-- <section>
 					<h3>Gradient descent</h3>
-					<ul>
+					<small><ul>
 						<li>Batch gradient descent: we look at all the examples at the same time. It is not efficient when we have a massive dataset</li>
 						<li>Stochastic gradient descent: use one random example. It avoids the whole data summations</li>
 						<li>Mini-batch gradient descent: could be even more faster, it uses m examples in each iteration</li>
 					</ul>
+				</small>
 					<img height="300" data-src="reveal.js-3.0.0/images/SGD.png">
 					<img height="300" data-src="reveal.js-3.0.0/images/GD.png">
-				</section>
+				</section> -->
 				<section>
 					<h3>Gradient descent</h3>
+					<div class="half">
+						<small>
+							<strong>Batch Optimization</strong>
+							$$ \theta_{k+1} = \theta_k - \eta \frac{1}{N}\sum_{t \in \{1,..N\}}\nabla_{\theta}l(f(x^{(t)}; \theta), y^{(t)})$$
+							<ul>
+								<li>More expensive step</li>
+								<li>Can choose among a wide range of optimization algorithms</li>
+								<li>Opportunities for parallelism</li>
+							</ul>
+						</small>
+						<img height="300" data-src="reveal.js-3.0.0/images/GD.png">
+					</div>
+					<div class="half">
+						<small>
+							<strong>Stochastic Optimization</strong>
+							$$ \theta_{k+1} = \theta_k - \eta \nabla_{\theta}l(f(x^{(t)}; \theta), y^{(t)})$$
+							$$ t \in \{1,...,N\} \text{is chosen randomly}$$
+							<ul>
+								<li>Very cheap iteration; gradient w.r.t. just 1 data point</li>
+								<li>Stochastic process dependent on the choice of i</li>
+								<li>Descent in expectation</li>
+							</ul>
+						</small>
+						<img height="300" data-src="reveal.js-3.0.0/images/SGD.png">
+					</div>
+				</section>
+				<section>
+					<h3>Theoretical motivation: strongly convex case</h3>
+					<div class="half">
+					<small>
+						<ul>
+						<li>Let's $R_n(\theta) = \frac{1}{n}\sum_{t \in \{1,...,n\}}l(f(x^{(t)}; \theta), y^{(t)})$ and $\theta^*=\text{argmin}(R_n)$</li>
+						
+							<li><strong>Batch gradient: linear convergence</strong>
+								$$R_n(\theta_k)-R_n(\theta^*) \leq O(\rho^k)$$
+							Per iteration cost proportional to n</li>
+							<li><strong>Stochastic gradient: sublinear convergence</strong>
+								$$\mathbb{E}[R_n(\theta_k)-R_n(\theta^*)] = O(\frac{1}{k})$$
+							Per iteration cost and convergence constant independant of n</li>
+						</ul>
+						<table>
+						<thead>
+							<tr>
+								<th></th>
+								<th>Batch</th>
+								<th>Stochastic</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>convergence rate</td>
+								<td>$\rho^k$</td>
+								<td>$\frac{1}{k}$</td>
+							</tr>
+							<tr>
+								<td>$\epsilon$ optimality</td>
+								<td>$n\log(\frac{1}{\epsilon})$</td>
+								<td>$\frac{1}{\epsilon}$</td>
+							</tr>
+						</tbody>
+					</table>
+					</small>
+				</div>
+				<div class="half">
+					Practical motivation
+					<img height="300" data-src="reveal.js-3.0.0/images/sgd_epochs.png">
+					<p><small>Fast initial progress of SG followed by drastic slowdown</small></p>
+				</div>
+				</section>
+				<section>
+					<h3>Beyond stochastic GD</h3>
+					<small><strong>Mini-batch gradient descent:</strong> is widely used in practice:
+					$$\theta_{k+1} = \theta_k - \eta \frac{1}{|S_k|}\sum_{t \in S_k}\nabla_{\theta}l(f(x^{(t)}; \theta), y^{(t)})$$
+					$$ S_k \subset \{1,...,n\} \text{is chosen randomly in each iteration}$$
 					<ul>
-						<li>We recall the gradient descent update: $x_{t+1} = x_t + \delta_t, \text{where } \delta_t = -\eta g_t$</li>
-						<li>Momentum: accelerates progress along dimensions in which gradient consistently point in the same direction and to slow progress along dimensions where the sign of the gradient continues to change.
-							$$ \delta_t = \rho \delta_{t-1} - \eta g_t$$</li>
-						<li>Adagrad: large gradients have smaller learning rates and small gradients have large learning rates:
-							$$ \delta_t = \frac{\eta}{\sqrt{\sum_{\tau=1}^t g_{\tau}^2}}g_t$$</li>
-						<li>Other approches: Adam, AdaDelta and RMSProp</li>
+						<li>allows some degree of parallelization</li>
+						<li>reduces variance of the stochastic gradients estimates</li>
 					</ul>
+
+					</small>
+					<img height="300" data-src="reveal.js-3.0.0/images/opt_spectrum.png">
+					<p><small>Schematic of two-dimensional spectrum of optimization methods</small></p>
+					
+				</section>
+				<section>
+					<h3>Second-order methods</h3>
+					<div class="half">
+					<small>
+						<p>Batch gradient step $\eta \nabla_{\theta}F(\theta_k)$ ignores curvature of the function:</p>
+						<img height="200" data-src="reveal.js-3.0.0/images/gd_update.png">
+					</small>
+					</div>
+
+					<div class="half">
+					<small>
+						<p>Newton scaling $B = (\nabla_{\theta}^2F(\theta_k))^{−1/2}$: gradient step moves to the minimizer:</p>
+						<img height="200" data-src="reveal.js-3.0.0/images/newton_scaling.png">
+					</small>
+					</div>
+					<div class="fragment">
+					<small>
+					<p>..corresponds to minimizing a quadratic model of F in the original space
+					$\theta_{k+1} = \theta_k - \eta s_k, \text{ where } \nabla_{\theta}^2F(\theta_k)s_k = -\nabla_{\theta}F(\theta_k)$
+				</p></small>
+					<img height="200" data-src="reveal.js-3.0.0/images/second_order.png">
+				</div>
+				</section>
+				<section>
+					<h3>Gradient descent methods</h3>
+					<small><ul>
+						<li>We recall the gradient descent update: $$x_{t+1} = x_t + \delta_t, \text{where } \delta_t = -\eta g_t$$</li>
+						<li><strong>Adagrad</strong>: large gradients have smaller learning rates and small gradients have large learning rates:
+							$$ \delta_t = \frac{\eta}{\sqrt{\sum_{\tau=1}^t g_{\tau}^2}}g_t$$</li>
+						<li><strong>Momentum</strong>: accelerates progress along dimensions in which gradient consistently point in the same direction and to slow progress along dimensions where the sign of the gradient continues to change.
+							$$ \delta_t = \rho \delta_{t-1} - \eta g_t$$</li>
+						
+					</ul></small>
+					<img height="300" data-src="reveal.js-3.0.0/images/momentum_update.png"> 
+				</section>
+				<section>
+					<h3>Gradient descent methods</h3>
+					<small><ul>
+						<li><strong>Nesterov Method</strong>: First make a big jump in the direction of the previous accumulated gradient. Then measure the gradient where you end up and make a correction.</li>
+						<img height="300" data-src="reveal.js-3.0.0/images/nesterov_update.png">
+
+						<li>Other approches: <strong>Adam</strong>, <strong>AdaDelta</strong> and <strong>RMSProp</strong></li>
+					</ul></small>
 				</section>
 				<section>
 					<h3>The mirage of convexity</h3>
-					<ul>
+					<small><ul>
 						<li>Local minima dominate in low-D, but saddle points dominate in high-D</li>
 						<li>Most local minima are close to the bottom (global minimum error)</li>
-					</ul>
+					</ul></small>
 					<img height="300" data-src="reveal.js-3.0.0/images/convexity.png">
 					<img height="300" data-src="reveal.js-3.0.0/images/saddle_point.png">
 				</section>
 				<section>
 					<h3>Saddle points during traning</h3>
-					<ul>
+					<small><ul>
 					Oscillaing between two behaviors:
 					<li>Slowly approaching a saddle point.</li>
 					<li>Escaping it</li>
-					</ul>
+					</ul></small>
 					<img height="400" data-src="reveal.js-3.0.0/images/saddle_training.png">
 				</section>
 				<section>
@@ -411,6 +600,148 @@
 					<img height="300" data-src="reveal.js-3.0.0/images/dropout.png">
 					<img height="200" data-src="reveal.js-3.0.0/images/dropout_train.png">
 				</section>
+
+				<section>
+					<h3>Regularization: Dropout</h3>
+					<small><ul>
+						<li><strong>Dropout is form of model averaging</strong>: let's consider a single hidden layer network with H hidden units. Dropout is equivalent to sampling from $2^H$ models. Each models only gets one traning example.</li>
+						<li>At evaluation time, instead of sampling many different models and take geometric mean of their output distribution, we use one model with all the hidden units activated but we halve their outgoing weights.</li>
+					</ul>
+				</small>
+				<div class="fragment">
+				<img height="300" data-src="reveal.js-3.0.0/images/hinton_dropout_slide.png">
+				<small>Geoffrey hinton's online course of neural networks for machine learning</small>
+			</div>
+				</section>
+				<section>
+				<h3>What does a neural network like in tensorflow?</h3>
+				<div class="half">
+					<img height="300" data-src="reveal.js-3.0.0/images/tensorflow.png">
+					<small>TensorFlow is Google open-sourced machine learning library</small>
+				</div>
+				<div class="half">
+					<img height="300" data-src="reveal.js-3.0.0/images/mnist.jpeg">
+					<small>Hello word: handwritten digits classification</small>
+				</div>
+			</section>
+			<section>
+				<h3>Simple model: Softmax classification</h3>
+				<img height="400" data-src="reveal.js-3.0.0/images/mnist_softmax.png">
+				$$ P(y=k) = \frac{\exp(\sum_{i=1}^{784}w_{k,i}x_i + b_k)}{\sum_{k=0}^9\exp(\sum_{i=1}^{784}w_{k,i}x_i + b_k)} = \text{softmax}(\sum_{i=1}^{784}w_{k,i}x_i + b_k)$$
+			</section>
+			<section>
+				<h3>matrix mutiplication: a batch of 100 images at a time</h3>
+				<img height="300" data-src="reveal.js-3.0.0/images/mnist_logit.png">
+				<small><p>X : Images [100, 784], W: Weights [784, 10], b : Biases [10], Y : predictions [100, 10]</p></small>
+				<pre><code data-trim contenteditable>
+					Y = tf.nn.softmax(tf.matmul(X, W) + b)
+				</code></pre>
+			</section>
+			<section>
+				<h3>Loss function</h3>
+				<img height="300" data-src="reveal.js-3.0.0/images/mnist_cross_entropy.png">
+				<pre><code data-trim contenteditable>
+					cross_entropy = -tf.reduce_sum(Y_*tf.log(Y))
+				</code></pre>
+			</section>
+			<section>
+				<h3>Tensorflow: Initialisation</h3>
+				<pre style="font-size: 28px"><code data-trim contenteditable>
+import tensorflow as tf
+
+X = tf.placeolder(tf.float32, [None, 28, 28, 1]) 
+# None will become the batch size, 100
+W = tf.Variable(tf.zeros([784, 10]))
+b = tf.Variable(tf.zeros([10]))
+
+init = tf.initialize_all_variables()
+				</code></pre>
+			</section>
+			<section>
+				<h3>tensorflow: loss function and accuracy</h3>
+				<pre style="font-size: 23px"><code data-trim contenteditable>
+# model
+Y = tf.nn.softmax(tf.matmul(tf.reshape(X, [-1, 784]), W) + b)
+# placefolder for correct labels
+Y_ = tf.placeholder(tf.float32, [None, 10])
+
+# loss function
+cross_entropy = -tf.reduce_sum(Y_*tf.log(Y))
+
+# % of correct label in batch
+is_correct = tf.equal(tf.argmax(Y, 1), tf.argmax(Y_, 1))
+accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
+				</code></pre>	
+			</section>
+			<section>
+				<h3>tensorflow: training</h3>
+				<pre style="font-size: 27px"><code data-trim contenteditable>
+optimizer = tf.train.GradientDescentOptimizer(0.001)
+train_step = optimizer.minimize(cross_entripy)
+				</pre></code>
+			</section>
+			<section>
+				<h3>TensorFlow: RUN</h3>
+				<pre><code data-trim contenteditable>
+sess = tf.Session()
+sess.run(init)
+for i in range(1000):
+# load batch images and labels
+batch_X, batch_Y = mnist.train.next_batch(100)
+  train_data={X: batch_X, Y_: batch_Y}
+
+  # train
+  sess.run(train_step, feed_dict=train_data)
+
+  #success
+  a, c = sess.run([accuracy, cross_entropy], feed_dict=train_data)
+
+  # sucess on test data
+  test_data={X: mnist.test.images, Y_: mnist.test.labels}
+  a, c = sess.run([accuracy, cross_entropy], feed_dict=test_data)
+
+				</code></pre>
+			</section>
+			<section>
+				<h3>TensorFlow: All code</h3>
+				<img height="600" data-src="reveal.js-3.0.0/images/all_code.png">
+			</section>
+			<section>
+				<h3>Go deeper</h3>
+				<img data-src="reveal.js-3.0.0/images/go_deeper.png">
+			</section>
+			<section>
+				<h3>Tensorflow: Initialisation</h3>
+				<pre><code data-trim contenteditable>
+K = 200
+L = 100
+M = 60
+N = 30
+W1 = tf.Variable(tf.truncated_normal([28*28, K]))
+b1 = tf.Variable(tf.zeros([K]))
+W2 = tf.Variable(tf.truncated_normal([K, L]))
+b2 = tf.Variable(tf.zeros([L]))
+W3 = tf.Variable(tf.truncated_normal([L, M]))
+b3 = tf.Variable(tf.zeros([M]))
+W4 = tf.Variable(tf.truncated_normal([M, N]))
+b4 = tf.Variable(tf.zeros([N]))
+W1 = tf.Variable(tf.truncated_normal([N, 10]))
+b1 = tf.Variable(tf.zeros([10]))
+				</code></pre>
+			</section>
+			<section>
+				<h3>TensorFlow: the model</h3>
+				<pre><code data-trim contenteditable>
+X = tf.reshape(X, [-1, 28*28])
+
+Y1 = tf.nn.sigmoid(tf.matmul(X, W1) + b1)
+Y2 = tf.nn.sigmoid(tf.matmul(Y1, W2) + b2)
+Y3 = tf.nn.sigmoid(tf.matmul(Y2, W3) + b3)
+Y4 = tf.nn.sigmoid(tf.matmul(Y3, W4) + b4)
+
+Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
+				</code></pre>
+			</section>
 				<section>
 					<h3>Computer vision</h3>
 					<div class="half">
@@ -471,7 +802,7 @@
 				</section>
 				<section>
 					<h3>Traditional approaches</h3>
-					<small>Maually designed features are often over-specified, incomplete and take a long time to design and validate.</small>
+					<small>Manually designed features are often over-specified, incomplete and take a long time to design and validate.</small>
 					<img data-src="reveal.js-3.0.0/images/traditional_vision.png">
 					<small>Example of descriptor: Scale-Invariant Feature Transform and vector quantization</small>
 					<img data-src="reveal.js-3.0.0/images/sift.png">
