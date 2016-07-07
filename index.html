@@ -586,6 +586,19 @@
 					<img height="300" data-src="reveal.js-3.0.0/images/saddle_point.png">
 				</section>
 				<section>
+					<h3>Are saddle points or local minima more common?</h3>
+					<small><ul>
+						<li>Imagine for each eigenvalue, you flip a coin</li>
+						<li>If heads, the eigenvalue is positive, if tails, negative</li>
+						<li>Need to get all heads to have a minimum</li>
+						<li>Higher dimensions -> exponentially less likely to get all heads</li>
+						<li>Random matrix theory: The coin is weighted; the lower J is, the more likely to be heads</li>
+						<li>So most local minima have low J!</li>
+						<li>Most critical points with high J are saddle points!</li>
+					</ul></small>
+					<small>[Ian Goodfellow, Deep Learning Summer School Montreal]</small>
+				</section>
+				<section>
 					<h3>Saddle points during traning</h3>
 					<small><ul>
 					Oscillaing between two behaviors:
@@ -594,6 +607,7 @@
 					</ul></small>
 					<img height="400" data-src="reveal.js-3.0.0/images/saddle_training.png">
 				</section>
+
 				<section>
 					<h3>Regularization: Dropout</h3>
 					<small>A Simple Way to Prevent Neural Networks from Overfitting</small>
@@ -781,12 +795,28 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<img height="500" data-src="reveal.js-3.0.0/images/neocognitron.png">
 				</section>
 				<section>
+					<h3>LeNet5 (1998)</h3>
+					<img data-src="reveal.js-3.0.0/images/lenet_paper.png">
+					<small>
+					<ul>
+						<li>Convolutional neural network use sequence of 3 layers: convolution, pooling, non-linearity.</li>
+						<li>Use convolution to extract spatial features.</li>
+						<li>Subsample using spatial average of maps.</li>
+						<li>Non-linearity in the form of tanh or sigmoids.</li>
+						<li>Multi-layer neural network (MLP) as final classifier.</li>
+						<li>Sparse connection matrix between layers to avoid large computational cost.</li>
+					</ul>
+				</small>
+				<img height="200" data-src="reveal.js-3.0.0/images/lenet.png">
+			</section>
+				<section>
 					<h3>Local connexions</h3>
 					<img height="500" data-src="reveal.js-3.0.0/images/local_connexion.png">
 				</section>
 				<section>
 					<h3>Convolution</h3>
-					<img height="500" data-src="reveal.js-3.0.0/images/convolution.png">
+					<img height="450" data-src="reveal.js-3.0.0/images/convolution.png">
+					<p><strong>Convolve</strong> the filter with images: slide over the images spatially and compute the dot products</p>  
 				</section>
 				<section>
 					<h3>Multiple convolution</h3>
@@ -801,16 +831,18 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<img height="600" data-src="reveal.js-3.0.0/images/conv2.png">
 				</section>
 				<section>
-					<h3>Traditional approaches</h3>
-					<small>Manually designed features are often over-specified, incomplete and take a long time to design and validate.</small>
-					<img data-src="reveal.js-3.0.0/images/traditional_vision.png">
-					<small>Example of descriptor: Scale-Invariant Feature Transform and vector quantization</small>
-					<img data-src="reveal.js-3.0.0/images/sift.png">
-				</section>
-				<section>
-					<h3>End to end training</h3>
-					<img data-src="reveal.js-3.0.0/images/end_to_end.png">
-					<img data-src="reveal.js-3.0.0/images/convnet.jpeg">
+					<h3>Pooling layer</h3>
+					<div class="half">
+					<small><ul>
+						<li>introduces local translation invariance</li>
+						<li>reduces dimentionnality</li>
+					</ul></small>
+					<img data-src="reveal.js-3.0.0/images/max_pooling.png">
+				</div>
+				<div class="half">
+					<img height="500" data-src="reveal.js-3.0.0/images/pooling_layer.png">	
+				</div>
+
 				</section>
 				<section>
 					<h3>Convolutional neural network (Convnet) layers</h3>
@@ -825,6 +857,19 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					</small>
 					<img height="350" data-src="reveal.js-3.0.0/images/convnet_layers.png">
 				</section>
+				<section>
+					<h3>Traditional approaches</h3>
+					<small>Manually designed features are often over-specified, incomplete and take a long time to design and validate.</small>
+					<img data-src="reveal.js-3.0.0/images/traditional_vision.png">
+					<small>Example of descriptor: Scale-Invariant Feature Transform and vector quantization</small>
+					<img data-src="reveal.js-3.0.0/images/sift.png">
+				</section>
+				<section>
+					<h3>End to end training</h3>
+					<img data-src="reveal.js-3.0.0/images/end_to_end.png">
+					<img data-src="reveal.js-3.0.0/images/convnet.jpeg">
+				</section>
+				
 				<section>
 					<h3>ImageNet challenge</h3>
 					14 million images gathered from internet and labeled via Amazon	Truk, 20k classes.
@@ -1091,6 +1136,9 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-o.png">
 					</div>
 				</section>
+				<!-- LSTMs define an extra cell memory ct, which is combined linearly at each timestamp t. The information that is propagated from ct−1 to ct is controlled by the three gates it, ft, and ot
+				, which determine the what to include from the input xt, the what to forget from ct−1 and what is relevant to the current state ht
+.-->
 				<section>
 					<h3>RNN results</h3>
 					<img height="300" data-src="reveal.js-3.0.0/images/rnn_baseline.png">
