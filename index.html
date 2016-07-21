@@ -576,6 +576,29 @@
 						<li>Other approches: <strong>Adam</strong>, <strong>AdaDelta</strong> and <strong>RMSProp</strong></li>
 					</ul></small>
 				</section>
+
+
+				<section>
+					<h3>What have we seen last time?</h3>
+					<ul>
+						<li>Multilayer perceptron: basic neural architecture</li>
+						<li>Learning algorithm: gradient descent</li>
+						<li>Backpropagation: efficient way to compute gradient</li>
+						<li>Gradient based optimization: Theoretical and practical motivation</li>
+					</ul>
+				</section>
+				<section>
+					<h3>What will we see today?</h3>
+					<ul>
+						<li>Non convex optimization</li>
+						<li>Regularization</li>
+						<li>Convolutional neural network: this is the main part</li>
+						<li>What does a neural network like in tensorflow?</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Non convex Optimzation</h3>
+				</section>
 				<section>
 					<h3>The mirage of convexity</h3>
 					<small><ul>
@@ -587,7 +610,7 @@
 				</section>
 				<section>
 					<h3>Are saddle points or local minima more common?</h3>
-					<small><ul>
+					<ul>
 						<li class="fragment">Imagine for each eigenvalue, you flip a coin</li>
 						<li class="fragment">If heads, the eigenvalue is positive, if tails, negative</li>
 						<li class="fragment">Need to get all heads to have a minimum</li>
@@ -595,7 +618,7 @@
 						<li class="fragment">Random matrix theory: The coin is weighted; the lower R is, the more likely to be heads</li>
 						<li class="fragment">So most local minima have low R!</li>
 						<li class="fragment">Most critical points with high J are saddle points!</li>
-					</ul></small>
+					</ul>
 					<small class="fragment">[Ian Goodfellow, Deep Learning Summer School Montreal]</small>
 				</section>
 				<section>
@@ -607,7 +630,9 @@
 					</ul></small>
 					<img height="400" data-src="reveal.js-3.0.0/images/saddle_training.png">
 				</section>
-
+				<section>
+					<h3>Regularization</h3>
+				</section>
 				<section>
 					<h3>Regularization: Dropout</h3>
 					<small>A Simple Way to Prevent Neural Networks from Overfitting</small>
@@ -627,135 +652,7 @@
 				<small>Geoffrey hinton's online course of neural networks for machine learning</small>
 			</div>
 				</section>
-				<section>
-				<h3>What does a neural network like in tensorflow?</h3>
-				<div class="half">
-					<img height="300" data-src="reveal.js-3.0.0/images/tensorflow.png">
-					<small>TensorFlow is Google open-sourced machine learning library</small>
-				</div>
-				<div class="half">
-					<img height="300" data-src="reveal.js-3.0.0/images/mnist.jpeg">
-					<small>Hello word: handwritten digits classification</small>
-				</div>
-			</section>
-			<section>
-				<h3>Simple model: Softmax classification</h3>
-				<img height="400" data-src="reveal.js-3.0.0/images/mnist_softmax.png">
-				$$ P(y=k) = \frac{\exp(\sum_{i=1}^{784}w_{k,i}x_i + b_k)}{\sum_{k=0}^9\exp(\sum_{i=1}^{784}w_{k,i}x_i + b_k)} = \text{softmax}(\sum_{i=1}^{784}w_{k,i}x_i + b_k)$$
-			</section>
-			<section>
-				<h3>matrix mutiplication: a batch of 100 images at a time</h3>
-				<img height="300" data-src="reveal.js-3.0.0/images/mnist_logit.png">
-				<small><p>X : Images [100, 784], W: Weights [784, 10], b : Biases [10], Y : predictions [100, 10]</p></small>
-				<pre><code data-trim contenteditable>
-					Y = tf.nn.softmax(tf.matmul(X, W) + b)
-				</code></pre>
-			</section>
-			<section>
-				<h3>Loss function</h3>
-				<img height="300" data-src="reveal.js-3.0.0/images/mnist_cross_entropy.png">
-				<pre><code data-trim contenteditable>
-					cross_entropy = -tf.reduce_sum(Y_*tf.log(Y))
-				</code></pre>
-			</section>
-			<section>
-				<h3>Tensorflow: Initialisation</h3>
-				<pre style="font-size: 28px"><code data-trim contenteditable>
-import tensorflow as tf
-
-X = tf.placeolder(tf.float32, [None, 28, 28, 1]) 
-# None will become the batch size, 100
-W = tf.Variable(tf.zeros([784, 10]))
-b = tf.Variable(tf.zeros([10]))
-
-init = tf.initialize_all_variables()
-				</code></pre>
-			</section>
-			<section>
-				<h3>tensorflow: loss function and accuracy</h3>
-				<pre style="font-size: 23px"><code data-trim contenteditable>
-# model
-Y = tf.nn.softmax(tf.matmul(tf.reshape(X, [-1, 784]), W) + b)
-# placefolder for correct labels
-Y_ = tf.placeholder(tf.float32, [None, 10])
-
-# loss function
-cross_entropy = -tf.reduce_sum(Y_*tf.log(Y))
-
-# % of correct label in batch
-is_correct = tf.equal(tf.argmax(Y, 1), tf.argmax(Y_, 1))
-accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
-				</code></pre>	
-			</section>
-			<section>
-				<h3>tensorflow: training</h3>
-				<pre style="font-size: 27px"><code data-trim contenteditable>
-optimizer = tf.train.GradientDescentOptimizer(0.001)
-train_step = optimizer.minimize(cross_entripy)
-				</pre></code>
-			</section>
-			<section>
-				<h3>TensorFlow: RUN</h3>
-				<pre><code data-trim contenteditable>
-sess = tf.Session()
-sess.run(init)
-for i in range(1000):
-# load batch images and labels
-batch_X, batch_Y = mnist.train.next_batch(100)
-  train_data={X: batch_X, Y_: batch_Y}
-
-  # train
-  sess.run(train_step, feed_dict=train_data)
-
-  #success
-  a, c = sess.run([accuracy, cross_entropy], feed_dict=train_data)
-
-  # sucess on test data
-  test_data={X: mnist.test.images, Y_: mnist.test.labels}
-  a, c = sess.run([accuracy, cross_entropy], feed_dict=test_data)
-
-				</code></pre>
-			</section>
-			<section>
-				<h3>TensorFlow: All code</h3>
-				<img height="600" data-src="reveal.js-3.0.0/images/all_code.png">
-			</section>
-			<section>
-				<h3>Go deeper</h3>
-				<img data-src="reveal.js-3.0.0/images/go_deeper.png">
-			</section>
-			<section>
-				<h3>Tensorflow: Initialisation</h3>
-				<pre><code data-trim contenteditable>
-K = 200
-L = 100
-M = 60
-N = 30
-W1 = tf.Variable(tf.truncated_normal([28*28, K]))
-b1 = tf.Variable(tf.zeros([K]))
-W2 = tf.Variable(tf.truncated_normal([K, L]))
-b2 = tf.Variable(tf.zeros([L]))
-W3 = tf.Variable(tf.truncated_normal([L, M]))
-b3 = tf.Variable(tf.zeros([M]))
-W4 = tf.Variable(tf.truncated_normal([M, N]))
-b4 = tf.Variable(tf.zeros([N]))
-W1 = tf.Variable(tf.truncated_normal([N, 10]))
-b1 = tf.Variable(tf.zeros([10]))
-				</code></pre>
-			</section>
-			<section>
-				<h3>TensorFlow: the model</h3>
-				<pre><code data-trim contenteditable>
-X = tf.reshape(X, [-1, 28*28])
-
-Y1 = tf.nn.sigmoid(tf.matmul(X, W1) + b1)
-Y2 = tf.nn.sigmoid(tf.matmul(Y1, W2) + b2)
-Y3 = tf.nn.sigmoid(tf.matmul(Y2, W3) + b3)
-Y4 = tf.nn.sigmoid(tf.matmul(Y3, W4) + b4)
-
-Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
-				</code></pre>
-			</section>
+				
 				<section>
 					<h3>Computer vision</h3>
 					<div class="half">
@@ -872,7 +769,7 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 				
 				<section>
 					<h3>ImageNet challenge</h3>
-					14 million images gathered from internet and labeled via Amazon	Truk, 20k classes.
+					14 million images gathered from internet and labeled via Amazon	Turk, 20k classes.
 					<img data-src="reveal.js-3.0.0/images/imagenet.jpg">
 				</section>
 				<section>
@@ -923,6 +820,140 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<h3>Convnet visualizing</h3>
 					<img height="620" data-src="reveal.js-3.0.0/images/layer_3_5.png">
 				</section>
+
+				<section>
+				<h3>What does a neural network like in tensorflow?</h3>
+				<div class="half">
+					<img height="300" data-src="reveal.js-3.0.0/images/tensorflow.png">
+					<small>TensorFlow is Google open-sourced machine learning library</small>
+				</div>
+				<div class="half">
+					<img height="300" data-src="reveal.js-3.0.0/images/mnist.jpeg">
+					<small>Hello word: handwritten digits classification</small>
+				</div>
+			</section>
+			<section>
+				<h3>Simple model: Softmax classification</h3>
+				<img height="400" data-src="reveal.js-3.0.0/images/mnist_softmax.png">
+				$$ P(y=k) = \frac{\exp(\sum_{i=1}^{784}w_{k,i}x_i + b_k)}{\sum_{k=0}^9\exp(\sum_{i=1}^{784}w_{k,i}x_i + b_k)} = \text{softmax}(\sum_{i=1}^{784}w_{k,i}x_i + b_k)$$
+			</section>
+			<section>
+				<h3>matrix mutiplication: a batch of 100 images at a time</h3>
+				<img height="300" data-src="reveal.js-3.0.0/images/mnist_logit.png">
+				<small><p>X : Images [100, 784], W: Weights [784, 10], b : Biases [10], Y : predictions [100, 10]</p></small>
+				<pre><code data-trim contenteditable>
+					Y = tf.nn.softmax(tf.matmul(X, W) + b)
+				</code></pre>
+			</section>
+			<section>
+				<h3>Loss function</h3>
+				<img height="300" data-src="reveal.js-3.0.0/images/mnist_cross_entropy.png">
+				<pre><code data-trim contenteditable>
+					cross_entropy = -tf.reduce_sum(Y_*tf.log(Y))
+				</code></pre>
+			</section>
+			<section>
+				<h3>Tensorflow: Initialisation</h3>
+				<pre style="font-size: 28px"><code data-trim contenteditable>
+import tensorflow as tf
+
+X = tf.placeolder(tf.float32, [None, 28, 28, 1]) 
+# None will become the batch size, 100
+W = tf.Variable(tf.zeros([784, 10]))
+b = tf.Variable(tf.zeros([10]))
+
+init = tf.initialize_all_variables()
+				</code></pre>
+			</section>
+			<section>
+				<h3>tensorflow: loss function and accuracy</h3>
+				<pre style="font-size: 23px"><code data-trim contenteditable>
+# model
+Y = tf.nn.softmax(tf.matmul(tf.reshape(X, [-1, 784]), W) + b)
+# placefolder for correct labels
+Y_ = tf.placeholder(tf.float32, [None, 10])
+
+# loss function
+cross_entropy = -tf.reduce_sum(Y_*tf.log(Y))
+
+# % of correct label in batch
+is_correct = tf.equal(tf.argmax(Y, 1), tf.argmax(Y_, 1))
+accuracy = tf.reduce_mean(tf.cast(is_correct, tf.float32))
+				</code></pre>	
+			</section>
+			<section>
+				<h3>tensorflow: training</h3>
+				<pre style="font-size: 27px"><code data-trim contenteditable>
+optimizer = tf.train.GradientDescentOptimizer(0.001)
+train_step = optimizer.minimize(cross_entropy)
+				</pre></code>
+			</section>
+			<section>
+				<h3>TensorFlow: RUN</h3>
+				<pre><code data-trim contenteditable>
+sess = tf.Session()
+sess.run(init)
+for i in range(1000):
+# load batch images and labels
+batch_X, batch_Y = mnist.train.next_batch(100)
+  train_data={X: batch_X, Y_: batch_Y}
+
+  # train
+  sess.run(train_step, feed_dict=train_data)
+
+  #success
+  a, c = sess.run([accuracy, cross_entropy], feed_dict=train_data)
+
+  # sucess on test data
+  test_data={X: mnist.test.images, Y_: mnist.test.labels}
+  a, c = sess.run([accuracy, cross_entropy], feed_dict=test_data)
+
+				</code></pre>
+			</section>
+			<section>
+				<h3>TensorFlow: All code</h3>
+				<img height="600" data-src="reveal.js-3.0.0/images/all_code.png">
+			</section>
+			<section>
+				<h3>Go deeper</h3>
+				<img data-src="reveal.js-3.0.0/images/go_deeper.png">
+			</section>
+			<section>
+				<h3>Tensorflow: Initialisation</h3>
+				<pre><code data-trim contenteditable>
+K = 200
+L = 100
+M = 60
+N = 30
+W1 = tf.Variable(tf.truncated_normal([28*28, K]))
+b1 = tf.Variable(tf.zeros([K]))
+W2 = tf.Variable(tf.truncated_normal([K, L]))
+b2 = tf.Variable(tf.zeros([L]))
+W3 = tf.Variable(tf.truncated_normal([L, M]))
+b3 = tf.Variable(tf.zeros([M]))
+W4 = tf.Variable(tf.truncated_normal([M, N]))
+b4 = tf.Variable(tf.zeros([N]))
+W1 = tf.Variable(tf.truncated_normal([N, 10]))
+b1 = tf.Variable(tf.zeros([10]))
+				</code></pre>
+			</section>
+			<section>
+				<h3>TensorFlow: the model</h3>
+				<pre><code data-trim contenteditable>
+X = tf.reshape(X, [-1, 28*28])
+
+Y1 = tf.nn.sigmoid(tf.matmul(X, W1) + b1)
+Y2 = tf.nn.sigmoid(tf.matmul(Y1, W2) + b2)
+Y3 = tf.nn.sigmoid(tf.matmul(Y2, W3) + b3)
+Y4 = tf.nn.sigmoid(tf.matmul(Y3, W4) + b4)
+
+Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
+				</code></pre>
+			</section>
+			<section>
+				<h3>Deep learning in natural language processing</h3>
+				<img height="500" data-src="reveal.js-3.0.0/images/word_embeddings_colah.png">
+			</section>
 				<section>
 					<h3>Deep learning in natural language processing</h3>
 					<ul>
@@ -939,18 +970,40 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					</ul>
 				</section>
 				<section>
+					<h3>What we will see today</h3>
+					<ul>
+						<li>Word embedding: skip-gram</li>
+						<li>Language model: Recurrent neural network and LSTM</li>
+						<li>Basic NLP tasks: part of speech and named entity</li>
+						<li>Sequence to sequence Framework: machine transation</li>
+						<li>Attention mechanism: machine translation and image captioning</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Word Embedding</h3>
+				</section>
+				<section>
 					<h3>Vector Representations of Words</h3>
 					<ul>
-						<li>Image and audio processing system high-dimensional datasets encoded as vectors of the individual pixel-intensities or power spectral density coefficients</li>
+						<li>Image and audio processing system work with high-dimensional datasets encoded as vectors of the individual pixel-intensities or power spectral density coefficients</li>
 						<li>Natural language processing systems traditionally treat words as discrete atomic symbols
-							<ul>
-								<li>Every word is orthogonal to one another</li>
-								<li>$w_{mother}. w_{father} = 0$</li>
-							</ul>
 						</li>
 
 					</ul>
 					<img height="200" data-src="reveal.js-3.0.0/images/why_word2vec.png">
+				</section>
+				<section>
+					<h3>Representing Words - Classical View: One Hot Encoding</h3>
+					<ul>
+						<li>Obama: 10000</li>
+						<li>Dolphin: 01000</li>
+						<li>Paris: 00100</li>
+						<li>Berlin: 00010</li>
+						<li>SeaWorld: 00001</li>
+					</ul>
+					<img height="200" data-src="reveal.js-3.0.0/images/word_one_hot_encoding.png">
+					<p>&#8658 Every word is orthogonal to one another $$(w_{Paris}. w_{Berlin} = 0)$$</p>
+				</section>
 				</section>
 				<section>
 					<h3>Word embedding</h3>
@@ -984,7 +1037,9 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 				</section>
 				<section>
 					<h3>Skip-gram</h3>
+					
 					<div class="half">
+						<small>
 						<ul>
 							<li>Let's $W$ be embedding matrix and $W'$ the output weight matrix</li>
 							<li>Let w a word is hot-one encoded by x such as $x_k=1, x_k=0 \text{ for } k' \neq k$, then, the hidden layer $$h = x^TW = W_{(k,.)} = v_w$$</li>
@@ -992,13 +1047,16 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 								$$ u_j= (v'_{w_j})^T h$$</li>
 							
 						</ul>
+						</small>
 					</div>
+
 					<div class="half">
 						<img height="500" data-src="reveal.js-3.0.0/images/skip_gram.png">
 					</div>
 				</section>
 				<section>
-					<!-- <p>Skip-gram</p> -->
+					<h3>Skip-gram</h3>
+					<small>
 					<ul>
 						<li>The probability of a context word $w_t$ (target) given the context's center $w_c$ is:
 							\begin{align} P(w_t| w_c) &= \text{softmax}(u_t) \\
@@ -1016,10 +1074,15 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 						 &- k\mathbb{E}_{w \sim P_{noise}}\log P(D=0|v'_{w}, v_{w_c})
 						 \end{align}</li>
 					</ul>
+				</small>
 				</section>
 				<section>
 					<h3>Linguistic regularities in the word space</h3>
 					<div class="half">
+						<small>
+						Analogies testing dimensions of	similarity can be solved quite well	just by	doing vector subtraction in	the	embedding space syntactically and semantically
+						</small>	
+						<small>
 					 <table>
 						<thead>
 							<tr>
@@ -1044,16 +1107,34 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 								<td>Windows - Microsoft + Google</td>
 								<td>Android</td>
 							</tr>
+							<tr>
+								<td>apple - apples + cars</td>
+								<td>car</td>
+							</tr>
 						</tbody>
 					</table>
+				</small>
 				</div>
 				<div class="half">
 					<img data-src="reveal.js-3.0.0/images/word_space_reg.png">
 				</div>
 				</section>
 				<section>
+					<div class="half">
+					<p>Baroni et al., “Don’t count, predict! A systematic comparision of context-counting vs. context-predicting semantic vectors”, ACL 2014</p>
+				</div>
+				<div class="half">
+					<img height="700" data-src="reveal.js-3.0.0/images/baroni_paper.png">
+				</div>
+				</section>
+				<!-- <section>
 					<i>“We set out to conduct this study [on context-counting vs.context-predicting] because we were annoyed by the triumphalist overtones often surrounding predict models, despite the almost complete lack of a proper comparison to count vectors. Our secret wish was to discover that it is all hype, and count vectors are far superior to their predictive counterparts. [...] Instead we found that the predict models are so good that, while the triumphalist overtones still sound excessive, there are very good reasons to switch to the new architecture.”</i>
 					<p>Baroni et al., “Don’t count, predict! A systematic comparision of context-counting vs. context-predicting semantic vectors”, ACL 2014</p>
+				</section> -->
+				<section>
+					<h3>Language Model:
+						Recurrent neural network</h3>
+						<img data-src="reveal.js-3.0.0/images/sonnet.jpg">
 				</section>
 				<section>
 					<h3>Language Model</h3>
@@ -1080,16 +1161,41 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					</ul>
 				</section>
 				<section>
+					<h3>N-gram: lack of Generalization</h3>
+					<ul>
+						<li class="fragment">Consider three trigrams: "chases a cat", "chases a dog" and "chases a rabbit" were observed in training corpus</li>
+						<li class="fragment">There is a clear pattern here: "chases a" will followed by an animal.</li>
+						<li class="fragment">Based on this concept, we generalize this knowledge to unseen trigrams.</li>
+						<li class="fragment">N-gram langauge model does not capture this concept</li>
+						<li class="fragment">If the trigram "chases a lama" didn't occurr more than once in the training corpus, the conditional probability given by n-gram language model will be zero.</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Recurrent neural network</h3>
+					<img data-src="reveal.js-3.0.0/images/fold_rnn.png">
+					<small>[Credit of slide to Fei-Fei Li & Andrej Karpathy & Justin Johnson]</small>
+				</section>
+				<section>
 					<h3>Recurrent neural network</h3>
 					<ul>
 						<li>Given list of word vectors: $x_1, x_2,...,x_T$</li>
 						<li>$h_t = \text{sigmoid}(W^{(hh)} h_{t-1} + W^{(hx)}xt)$</li>
 						<li>$y_t = \text{softmax}(W^{(yh)} h_t) $</li>
 					</ul>
-					<img height="400"data-src="reveal.js-3.0.0/images/rnn.png">
+					<img height="400" data-src="reveal.js-3.0.0/images/rnn.png">
 				</section>
 				<section>
-					<h3>RNN training</h3>
+					<h4>the difficulty of training Recurrent Neural Networks: for hacker :)</h4>
+					<img height="400" data-src="reveal.js-3.0.0/images/code_rnn.png">
+					<small>[Credit of the slide to Fei-Fei Li & Andrej Karpathy & Justin Johnson]</small>
+				</section>
+				<section>
+					<h4>the difficulty of training Recurrent Neural Networks: for hacker :)</h4>
+					<img height="400" data-src="reveal.js-3.0.0/images/code_rnn_2.png">
+					<small>[Credit of the slide to Fei-Fei Li & Andrej Karpathy & Justin Johnson]</small>
+				</section>
+				<section>
+					<h4>the difficulty of training Recurrent Neural Networks: with maths</h4>
 					<ul>
 						<li >Let's take a simpler RNN
 							$$h_t = Wf(h_{t-1}) + W^{(hx)}x_t$$
@@ -1103,7 +1209,7 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					</ul>
 				</section>
 				<section>
-					<h3>RNN training</h3>
+					<h4>the difficulty of training Recurrent Neural Networks: with maths</h4>
 					<ul>
 						<li>$\frac{\partial h_t}{\partial h_k} = \prod_{i=k+1}^{t} \frac{\partial h_i}{\partial h_{i-1}}$</li>
 						<li class="fragment">$\text{As } h_i = Wf(h_{i-1}) + W^{(hx)}x_i$, $$\frac{\partial h_i}{\partial h_{i-1}} = W^T\text{diag}(f'(h_{i-1}))$$
@@ -1123,27 +1229,435 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-chain.png">
 				</section>
 				<section>
+					<h3>Long Short Term Memory network</h3>
 					<div class="half">
-						<p>forget gate</p>
-						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-f.png">
-						<p>input gate</p>
-						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-i.png">
-					</div>
+						<small>
+					<ul>
+						<li>LSTM defines an extra cell mempry $c_t$.</li>
+						<li>The cell memory $c_t$ is combined linearly at each timestamp
+							$$c_t = f_{t}*c_{t-1} + i_t * \tilde{c}_t$$</li>
+						<li>The information which is propagated from $c_{t-1}$ to $c_t$ is controlled by input and forget gates $i_t$ and $f_t$.</li>
+						<li>$\tilde{c}_t$ is the memory cell candidate.
+							$\tilde{c}_t = \text{tanh}(W_c[h_{t-1}, x_t] + b_c)$</li>
+						<li>The information propagated to the hidden layer is controlled by the output gate:
+							$$ h_t = o_t * \text{tanh}(c_t)$$</li>
+						<li>The input gate determines the what to include from the input $x_t$.</li>
+						<li>The forget gate determines the what to forget from $c_{t−1}$.</li>
+						<li>the output gate determines what is relevant to the current state $h_t$</li>
+					</ul>
+				</small>
+				</div>
+				<div class="half">
+					<img height="400" data-src="reveal.js-3.0.0/images/LSTM_block.png">
+				</div>
+				</section>
+				<section>
 					<div class="half">
 						<p>Memory cell</p>
 						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-C.png">
+						<p>forget gate</p>
+						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-f.png">
+						
+					</div>
+					<div class="half">
+						<p>input gate</p>
+						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-i.png">
 						<p>output gate</p>
 						<img class="fragment" height="200" data-src="reveal.js-3.0.0/images/LSTM3-focus-o.png">
 					</div>
+				</section>
+				<section>
+					<h3>RNN vs LSTM</h3>
+					<div class ="half">
+					<p>RNN</p>
+					$$h_t = \text{tanh}(W \left( \begin{array}{c}x_t \\ h_{t-1} \end{array} \right)) $$
+					$$ h \in \textbf{R}^n, \text{  } W [n \text{ x } 2n] $$
+					</div>
+					<div class="half">
+					<p>LSTM</p>
+					$$ \left( \begin{array}{c} i_t \\ f_t \\ o_t \\ \tilde{c}_t \end{array} \right) = 
+					\left( \begin{array}{c} \text{sigmoid} \\ \text{sigmoid} \\ \text{sigmoid} \\ \text{tanh} \end{array} \right) W \left( \begin{array}{c}x_t \\ h_{t-1} \end{array} \right)$$
+					$$ c_t = f_{t}*c_{t-1} + i_t * \tilde{c}_t $$
+					$$ h_t = o_t * \text{tanh}(c_t) $$
+					$$ h \in \textbf{R}^n, \text{  } W [4n \text{ x }2n] $$
+				</div>
 				</section>
 				<!-- LSTMs define an extra cell memory ct, which is combined linearly at each timestamp t. The information that is propagated from ct−1 to ct is controlled by the three gates it, ft, and ot
 				, which determine the what to include from the input xt, the what to forget from ct−1 and what is relevant to the current state ht
 .-->
 				<section>
+					<h3>Language model benchmark: Google News Benchmark (1B tokens)</h3>
+					<table>
+						<thead>
+							<tr>
+								<th>model</th>
+								<th>perplexity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>5-gram + KN regularized</td>
+								<td>74.4</td>
+							</tr>
+							<tr>
+								<td>RNN [Chelba et al, 2014]</td>
+								<td>51.3</td>
+							</tr>
+							<tr>
+								<td>LSTM [Brain team, submitted to ICML 2016]</td>
+								<td>30</td>
+							</tr>
+						</tbody>
+					</table>
+					<small>[Samy Bengio: college de France presentation]</small>
+				</section>
+				<!-- <section>
 					<h3>RNN results</h3>
 					<img height="300" data-src="reveal.js-3.0.0/images/rnn_baseline.png">
 					<p><i>"Extensions of recurrent neural network language model"</i> by Mikolov and al 2011</p>
 					<p>KN5 refers to Count-based language model with Kneser-Ney smoothing and 5-grams</p>
+				</section> -->
+				<section>
+					<h3>Basic Information Extraction tasks</h3>
+					<ul>
+					<li>Part of speech tagging (POS)</li>
+					<li>Named entity recognition (NER)</li>
+				</ul>
+				</section>
+				<section>
+					<h3>Information Extraction</h3>
+					<div class="half">
+					<p>Part Of Speech tags</p>
+					<table>
+						<thead>
+							<tr>
+								<th>tag</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>DT</td>
+								<td>Determiner</td>
+							</tr>
+							<tr>
+								<td>JJ</td>
+								<td>Adjective</td>
+							</tr>
+							<tr>
+								<td>VB</td>
+								<td>Verb, base form</td>
+							</tr>
+							<tr>
+								<td>PRP</td>
+								<td>Personal pronoun</td>
+							</tr>
+							<tr>
+								<td>...</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="half">
+					<p>Named Entity recognition</p>
+					<ul>
+						<li>Organisation</li>
+						<li>Date</li>
+						<li>Location</li>
+						<li>Person</li>
+					</ul>
+				</div>
+				</section>
+				<section>
+					<h3>Classical approach</h3>
+					<img data-src="reveal.js-3.0.0/images/pos_classical.png">
+					<small>[Standford NLP, Chris Manning]</small>
+				</section>
+				<section>
+					<h3>Beam Search for inference</h3>
+					<ul>
+						<li>Intuition: follow single path at a time but switch paths whenever some competing path look better</li>
+						<li>Beam Search: keep only k most promising path (k highest or lowest scores).</li>
+						<li>Beam Search example k = 3 (better = lower score): S={A} &#8594;  S={B, C, D} &#8594; S={B, C, E} &#8594; S={C, E, H}</li>
+					</ul>
+					<img class="fragment" height="150" data-src="reveal.js-3.0.0/images/beam1.png">
+					<img class="fragment" height="150" data-src="reveal.js-3.0.0/images/beam2.png">
+					<img class="fragment" height="150" data-src="reveal.js-3.0.0/images/beam3.png">
+					<img class="fragment" height="150" data-src="reveal.js-3.0.0/images/beam4.png">
+				</section>
+				<section>
+					<h3>Classical approach</h3>
+					<small>
+					<ul>
+						<li>At each time, a classifier make a single decision conditioned on evidence from observations and previous decisions</li>
+						<li> extract from the sentence a rich set of hand-designed features which are then fed to a standard classification algorithm, e.g. a Support Vector Machine (SVM), often with 
+						a linear kernel</li>
+						<li>The choice of features is a completely empirical process, mainly based first on linguistic intuition, and then trial and error, and the feature selection is task dependent</li>
+					</ul>
+				</small>
+					<div class="half">
+						<small>
+							<strong>Sentence</strong>
+					<table>
+						<tbody>
+							<tr>
+								<td>-3</td>
+								<td>-2</td>
+								<td>-1</td>
+								<td>0</td>
+								<td>+1</td>
+							</tr>
+							<tr>
+								<td>ORG</td>
+								<td>ORG</td>
+								<td>O</td>
+								<td>???</td>
+								<td>???</td>
+							</tr>
+							<tr>
+								<td>Xerox</td>
+								<td>Corp.</td>
+								<td>fell</td>
+								<td>26</td>
+								<td>%</td>
+							</tr>
+						</tbody>
+					</table>
+				</small>
+			</div>
+			<div class="half">
+				<small>
+					<strong>Features</strong>
+					<table>
+						<tbody>
+							<tr>
+								<td>$W_0$</td>
+								<td>26</td>
+							</tr>
+							<tr>
+								<td>$W_{+1}$</td>
+								<td>%</td>
+							</tr>
+							<tr>
+								<td>$W_{-1}$</td>
+								<td>fell</td>
+							</tr>
+							<tr>
+								<td>$C_{-1}$</td>
+								<td>O</td>
+							</tr>
+							<tr>
+								<td>$C_{-2}-C_{-1}$</td>
+								<td>ORG-O</td>
+							</tr>
+							<tr>
+								<td>hasdigit?</td>
+								<td>true</td>
+							</tr>
+							<tr>
+								<td>hasdigit?</td>
+								<td>true</td>
+							</tr>
+							<tr>
+								<td>...</td>
+								<td>...</td>
+							</tr>
+
+						</tbody>
+					</table>
+					</small>
+			</div>
+				</section>
+				<section>
+					<h3>Natural Language Processing (almost) from Scratch</h3>
+					<div class="half">
+						<small>
+						<ul>
+							<li>Use a neural network to learn features</li>
+							<li><strong>Embedding layer</strong>: embedding vectors are stored in $LT_W$ which is a lookup table. We embed words with the same way as in word2vec. We could extend embedding to discrete features such as word suffix.</li>
+							<li>For given input x, the network output a score $f_i(x)$ for each tag $i$.</li>
+							<li><strong>Word-Level Log-Likelihood</strong>: the conditional tag propability is:
+								$$ p(i| x) = \text{softmax}(f_i)$$</li>
+						</ul>
+					</small>
+					</div>
+					<div class="half">
+					<img height="500" data-src="reveal.js-3.0.0/images/pos_nn.png">
+					<small>[Collobert and al, 2011]</small>
+				</div>
+			</section>
+				<section>
+					<h3>Natural Language Processing (almost) from Scratch</h3>
+					<small>
+					<strong>Sentence-Level Log-Likelihood</strong>:
+					<ul>
+						<li>We know that there are dependencies between word tags in a sentence</li>
+						<li>Tags organized in chunks and some tags cannot follow other tags</li>
+						<li>We introduce a transition score $(A_{i,j})_{(i,j)}$ for jumping from i to j tags in successive words. The transition scores are going to be trained.</li>
+						<li>The score of a sentence $[x]_1^T$ along a path of tags $[i]_1^T$ is then given by the sum of transition scores and network scores:
+							$$ s([x]_1^T, [i]_1^T) = \sum_{t=1}^T (A_{i_{t-1}, i_t} + f_{i_t})$$</li>
+							<li>Then we normalize this score over all possible tag paths using softmax</li>
+					</ul>
+					<div class="fragment">
+					<strong>Results</strong>
+					<table>
+						<thead>
+							<tr>
+								<th>Task</th>
+								<th>Benchmark</th>
+								<th>SENNA</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Part of Speech (Accuracy)</td>
+								<td>97.24</td>
+								<td>97.29</td>
+							</tr>
+							<tr>
+								<td>Named Entity Recognition (F1)</td>
+								<td>89.31</td>
+								<td>89.59</td>
+							</tr>
+						</tbody>
+					</table>
+					[Collobert and al, 2011]
+				</small>
+			</small>
+				</section>
+				<section>
+					<h3>Sequence to Sequence Framework: machine translation and image captioning as applications</h3>
+				</section>
+				<section>
+					<h3>Statistical Machine translation: classical approach</h3>
+					<small>
+					<ul>
+						<li>Translation from source to target ($t\rightarrow s$)</li>
+						<li>Source sentence: $s = s_1^m  = s_1..s_j..s_m$</li>
+						<li>Target sentence: $t = t_1^I = t_1..t_i..t_I$</li>
+						<li class="fragment">Search for the best translation:
+							$$ t^* = \text{argmax}_t p(t|s)$$</li>
+						<li class="fragment"> Bayes rule: 
+							$$ t^* = \text{argmax}_t \frac{p(s|t) p(t)}{p(s)} = \text{argmax}_t p(s|t) p(t)$$</li>
+						<li class="fragment">p(s|t): translation model trained on parallel data (bitexts)</li>
+						<li class="fragment">p(t): language model trained on monolingual text: controls whether the target sentence is well-formed or not</li>
+					</ul>
+				</small>
+				</section>
+				<section>
+					<h3>Statistical Machine translation: classical approach</h3>
+					<div class="half">
+						<small>
+							<ul>
+								<li>Perform word alignment in both directions</li>
+								<li>Extract phrase (heuristic)</li>
+								<li>Score phrases (relative frequency)</li>
+								<li>Train language and reordering model</li>
+								<li>Optimize weights of each model and combine all models</li>
+							</ul>
+							<strong class="fragment">&#8658 many steps which are optimized individually, no global training</strong> 
+						</small>
+					</div>
+					<div class="half">
+						<img data-src="reveal.js-3.0.0/images/smt.png">
+						<small>[credit of the slide to Holger schwenk, college de France seminar]</small>
+					</div>
+				</section>
+				<section>
+					<h3>Sequence to sequence: Encoder/decoder approach</h3>
+					<ul>
+						<li>An encoder processes the source sentence and creates an compact representation</li>
+						<li>This representation is the input to the decoder which generates a sequence in the target sentence</li>
+					</ul>
+					<img height="300" data-src="reveal.js-3.0.0/images/encoder_decoder.png">
+				</section>
+
+				<section>
+					<img height="150" data-src="reveal.js-3.0.0/images/seq2seq_paper.png">
+					<small>
+					<ul>
+						Some details:
+						<li>Encoder/decoder: huge LSTM: 4 layers, 384M parameters and 8,000 dimensional state each.</li>
+						<li>Encoder: no output layer, no loss function.</li>
+						<li>SMT basline: 33.30 BLEU.</li>
+						<li>Beam search for inference: 12 size.</li>
+						<li>Neural Machine Tranlation system (NMT): 30.59 BLEU and 34.91 ensemble of 5.</li>
+					</ul>
+					</small>
+					<img height="300" data-src="reveal.js-3.0.0/images/seq2seq_lstm.png">
+					<small><p>$\text{BLEU} = \text{BP} \exp{\sum_{i=1}^N \frac{\log(p_n)}{N}}$ where $p_n$ is the n_gram precision and BP is brevity prenalty</p></small>
+				</section>
+				<section>
+					<img height="150" data-src="reveal.js-3.0.0/images/seq2seq_paper.png">
+					<p>A figure of a 2-dimensional PCA projection of the LSTM hidden states that are obtained after processing the phrases</p>
+					<img height="300" data-src="reveal.js-3.0.0/images/seq2seq_representation.png">
+
+				</section>
+				<section>
+					<h3>The Trouble with Simple Encoder-Decoder Architectures</h3>
+					<ul>
+						<li>The encoder compresses the input sequence as a fixed-size vector from which the decoder needs to generate a full translation.</li>
+						<li>Encoder-Decoder does not perform well with long sentences.</li>
+					</ul>
+					<img height="300" data-src="reveal.js-3.0.0/images/BLEU_vs_length.png">
+				</section>
+				<section>
+					<h3>A solution: Attention mechanism</h3>
+					<ul>
+						<li>Let's imagine that you are translating the source sentence $(x_1,x_2...,x_n)$</li>
+						<li>You have already written the first i-1 traget words $(y_1,y_2,..y_{i-1})$</li>
+						<li>In addition to the already generated target words, A translator looks at each source word $x_j$ and decide whether the source word x_j is relevant for the next target word.</li>
+						<li>This is called attention mechanism.</li>
+					</ul>
+				</section>
+				<section>
+					<img height="100" width="400" data-src="reveal.js-3.0.0/images/attention_paper.png">
+					<small>
+					<ul>
+						<li>The attention mechanism is implemented as a neural network with a single hidden layer and a single scalar output $e_j$. This is applied to every source word $x_j$</li>
+						<li>The attention mechanism takes as an input the previous target hidden state $z_i$ and the current source hidden state $h_i$</li>
+						<li>The relevance score of every source word is $\alpha_j = \frac{\exp(e_j)}{\sum_{j'}\exp(e_{j'})}$</li>
+						<li>The sentence representation vector is: $c_i = \sum_{j}\alpha_jh_j$. which summarizes the information about the whole sentence with different emphasis on different words.</li>
+					</ul>
+					</small>
+					<img height="300" data-src="reveal.js-3.0.0/images/attention_net.png">
+				</section>
+				<section>
+					<h3>Attention mechanism results</h3>
+					<img height="250" data-src="reveal.js-3.0.0/images/attention_perf.png">
+					<div class="fragment">
+					<img height="300" height="300" data-src="reveal.js-3.0.0/images/soft_alignment.png">
+					<small>Edge thicknesses represent the attention weights found by the attention model.</small>
+				</div>
+				</section>
+				<section>
+					<h3>Image captioning</h3>
+					<img data-src="reveal.js-3.0.0/images/image_caption.png">
+				</section>
+				<section>
+					<h3>Image caption with attention mecahnism</h3>
+					<img data-src="reveal.js-3.0.0/images/attention_image_captioning.png">
+				</section>
+				<section>
+					<h3>Image caption with attention mechanism</h3>
+					<img height="300" data-src="reveal.js-3.0.0/images/attention_TP.png">
+					<div class="fragment">
+						<img height="200" data-src="reveal.js-3.0.0/images/attention_FP.png">
+						<small>Examples of mistakes where we can use attention to gain intuition into what the model saw</small>
+					</div>
+				</section>
+				<section>
+					<h3>Recurrent neural network: different architectures</h3>
+					<img  data-src="reveal.js-3.0.0/images/rnn_flexibility.png">
+					<small>
+						<ul>
+							<li>One to one: Vanilla Neural Networks</li>
+							<li>One to many: e.g. Image Captioning</li>
+							<li>many to one: e.g. Sentiment Classification</li>
+							<li>many to many: e.g. Machine Translation</li>
+							<li>many to many: e.g. Video classification on frame level</li>
+						</ul>
+					</small>
 				</section>
 				<section>
 					<h3>CONCLUSION</h3>
