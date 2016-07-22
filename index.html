@@ -972,7 +972,7 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 				<section>
 					<h3>What we will see today</h3>
 					<ul>
-						<li>Word embedding: skip-gram</li>
+						<li>Word embedding: word2vec</li>
 						<li>Language model: Recurrent neural network and LSTM</li>
 						<li>Basic NLP tasks: part of speech and named entity</li>
 						<li>Sequence to sequence Framework: machine transation</li>
@@ -1234,16 +1234,16 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 						<small>
 					<ul>
 						<li>LSTM defines an extra cell mempry $c_t$.</li>
-						<li>The cell memory $c_t$ is combined linearly at each timestamp
+						<li class="fragment">The cell memory $c_t$ is combined linearly at each timestamp
 							$$c_t = f_{t}*c_{t-1} + i_t * \tilde{c}_t$$</li>
-						<li>The information which is propagated from $c_{t-1}$ to $c_t$ is controlled by input and forget gates $i_t$ and $f_t$.</li>
-						<li>$\tilde{c}_t$ is the memory cell candidate.
+						<li class="fragment">The information which is propagated from $c_{t-1}$ to $c_t$ is controlled by input and forget gates $i_t$ and $f_t$.</li>
+						<li class="fragment">$\tilde{c}_t$ is the memory cell candidate.
 							$\tilde{c}_t = \text{tanh}(W_c[h_{t-1}, x_t] + b_c)$</li>
-						<li>The information propagated to the hidden layer is controlled by the output gate:
+						<li class="fragment">The information propagated to the hidden layer is controlled by the output gate:
 							$$ h_t = o_t * \text{tanh}(c_t)$$</li>
-						<li>The input gate determines the what to include from the input $x_t$.</li>
-						<li>The forget gate determines the what to forget from $c_{t−1}$.</li>
-						<li>the output gate determines what is relevant to the current state $h_t$</li>
+						<li class="fragment">The input gate determines the what to include from the input $x_t$.</li>
+						<li class="fragment">The forget gate determines the what to forget from $c_{t−1}$.</li>
+						<li class="fragment">the output gate determines what is relevant to the current state $h_t$</li>
 					</ul>
 				</small>
 				</div>
@@ -1390,9 +1390,9 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<small>
 					<ul>
 						<li>At each time, a classifier make a single decision conditioned on evidence from observations and previous decisions</li>
-						<li> extract from the sentence a rich set of hand-designed features which are then fed to a standard classification algorithm, e.g. a Support Vector Machine (SVM), often with 
+						<li class="fragment"> extract from the sentence a rich set of hand-designed features which are then fed to a standard classification algorithm, e.g. a Support Vector Machine (SVM), often with 
 						a linear kernel</li>
-						<li>The choice of features is a completely empirical process, mainly based first on linguistic intuition, and then trial and error, and the feature selection is task dependent</li>
+						<li class="fragment">The choice of features is a completely empirical process, mainly based first on linguistic intuition, and then trial and error, and the feature selection is task dependent</li>
 					</ul>
 				</small>
 					<div class="half">
@@ -1474,9 +1474,9 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 						<small>
 						<ul>
 							<li>Use a neural network to learn features</li>
-							<li><strong>Embedding layer</strong>: embedding vectors are stored in $LT_W$ which is a lookup table. We embed words with the same way as in word2vec. We could extend embedding to discrete features such as word suffix.</li>
-							<li>For given input x, the network output a score $f_i(x)$ for each tag $i$.</li>
-							<li><strong>Word-Level Log-Likelihood</strong>: the conditional tag propability is:
+							<li class="fragment"><strong>Embedding layer</strong>: embedding vectors are stored in $LT_W$ which is a lookup table. We embed words with the same way as in word2vec. We could extend embedding to discrete features such as word suffix.</li>
+							<li class="fragment">For given input x, the network output a score $f_i(x)$ for each tag $i$.</li>
+							<li class="fragment"><strong>Word-Level Log-Likelihood</strong>: the conditional tag propability is:
 								$$ p(i| x) = \text{softmax}(f_i)$$</li>
 						</ul>
 					</small>
@@ -1493,10 +1493,10 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<ul>
 						<li>We know that there are dependencies between word tags in a sentence</li>
 						<li>Tags organized in chunks and some tags cannot follow other tags</li>
-						<li>We introduce a transition score $(A_{i,j})_{(i,j)}$ for jumping from i to j tags in successive words. The transition scores are going to be trained.</li>
-						<li>The score of a sentence $[x]_1^T$ along a path of tags $[i]_1^T$ is then given by the sum of transition scores and network scores:
+						<li class="fragment">We introduce a transition score $(A_{i,j})_{(i,j)}$ for jumping from i to j tags in successive words. The transition scores are going to be trained.</li>
+						<li class="fragment">The score of a sentence $[x]_1^T$ along a path of tags $[i]_1^T$ is then given by the sum of transition scores and network scores:
 							$$ s([x]_1^T, [i]_1^T) = \sum_{t=1}^T (A_{i_{t-1}, i_t} + f_{i_t})$$</li>
-							<li>Then we normalize this score over all possible tag paths using softmax</li>
+						<li class="fragment">Then we normalize this score over all possible tag paths using softmax</li>
 					</ul>
 					<div class="fragment">
 					<strong>Results</strong>
@@ -1582,10 +1582,11 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 						<li>SMT basline: 33.30 BLEU.</li>
 						<li>Beam search for inference: 12 size.</li>
 						<li>Neural Machine Tranlation system (NMT): 30.59 BLEU and 34.91 ensemble of 5.</li>
+						<li>$\text{BLEU} = \text{BP} \exp{\sum_{i=1}^N \frac{\log(p_n)}{N}}$ where $p_n$ is the n_gram precision and BP is brevity prenalty</li>
 					</ul>
 					</small>
 					<img height="300" data-src="reveal.js-3.0.0/images/seq2seq_lstm.png">
-					<small><p>$\text{BLEU} = \text{BP} \exp{\sum_{i=1}^N \frac{\log(p_n)}{N}}$ where $p_n$ is the n_gram precision and BP is brevity prenalty</p></small>
+					
 				</section>
 				<section>
 					<img height="150" data-src="reveal.js-3.0.0/images/seq2seq_paper.png">
@@ -1605,9 +1606,9 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<h3>A solution: Attention mechanism</h3>
 					<ul>
 						<li>Let's imagine that you are translating the source sentence $(x_1,x_2...,x_n)$</li>
-						<li>You have already written the first i-1 traget words $(y_1,y_2,..y_{i-1})$</li>
-						<li>In addition to the already generated target words, A translator looks at each source word $x_j$ and decide whether the source word x_j is relevant for the next target word.</li>
-						<li>This is called attention mechanism.</li>
+						<li class="fragment">You have already written the first $i-1$ target words $(y_1,y_2,..y_{i-1})$</li>
+						<li class="fragment">In addition to the already generated target words, A translator looks at each source word $x_j$ and decide whether the source word $x_j$ is relevant for the next target word.</li>
+						<li class="fragment">This is called attention mechanism.</li>
 					</ul>
 				</section>
 				<section>
@@ -1615,9 +1616,9 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<small>
 					<ul>
 						<li>The attention mechanism is implemented as a neural network with a single hidden layer and a single scalar output $e_j$. This is applied to every source word $x_j$</li>
-						<li>The attention mechanism takes as an input the previous target hidden state $z_i$ and the current source hidden state $h_i$</li>
-						<li>The relevance score of every source word is $\alpha_j = \frac{\exp(e_j)}{\sum_{j'}\exp(e_{j'})}$</li>
-						<li>The sentence representation vector is: $c_i = \sum_{j}\alpha_jh_j$. which summarizes the information about the whole sentence with different emphasis on different words.</li>
+						<li class="fragment">The attention mechanism takes as an input the previous target hidden state $z_i$ and the current source hidden state $h_i$</li>
+						<li class="fragment">The relevance score of every source word is $\alpha_j = \frac{\exp(e_j)}{\sum_{j'}\exp(e_{j'})}$</li>
+						<li class="fragment">The sentence representation vector is: $c_i = \sum_{j}\alpha_jh_j$. which summarizes the information about the whole sentence with different emphasis on different words.</li>
 					</ul>
 					</small>
 					<img height="300" data-src="reveal.js-3.0.0/images/attention_net.png">
