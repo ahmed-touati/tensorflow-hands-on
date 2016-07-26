@@ -1122,6 +1122,7 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 				<section>
 					<div class="half">
 					<p>Baroni et al., “Don’t count, predict! A systematic comparision of context-counting vs. context-predicting semantic vectors”, ACL 2014</p>
+					<small><p>“We set out to conduct this study [on context-counting vs.context-predicting] because we were annoyed by the triumphalist overtones often surrounding predict models, despite the almost complete lack of a proper comparison to count vectors. Our secret wish was to discover that it is all hype, and count vectors are far superior to their predictive counterparts. [...] Instead we found that the predict models are so good that, while the triumphalist overtones still sound excessive, there are very good reasons to switch to the new architecture.”</p></small>
 				</div>
 				<div class="half">
 					<img height="700" data-src="reveal.js-3.0.0/images/baroni_paper.png">
@@ -1150,7 +1151,7 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 				<section>
 					<h3>Traditional language model</h3>
 					<ul>
-						<li>Probability is usually condi3oned on window of n previous words: Markov assumption:
+						<li>Probability is usually conditioned on window of n previous words: Markov assumption:
 							\begin{align}
 							&p(w_1,...,w_T) = p(w_1)\prod_{i=1}^m p(w_i|w_1,...,w_{i-1}) \\
 							& \simeq p(w_1)\prod_{i=1}^m p(w_i|w_{i-(n-1)},...,w_{i-1})
@@ -1166,7 +1167,7 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 						<li class="fragment">Consider three trigrams: "chases a cat", "chases a dog" and "chases a rabbit" were observed in training corpus</li>
 						<li class="fragment">There is a clear pattern here: "chases a" will followed by an animal.</li>
 						<li class="fragment">Based on this concept, we generalize this knowledge to unseen trigrams.</li>
-						<li class="fragment">N-gram langauge model does not capture this concept</li>
+						<li class="fragment">N-gram language model does not capture this concept</li>
 						<li class="fragment">If the trigram "chases a lama" didn't occurr more than once in the training corpus, the conditional probability given by n-gram language model will be zero.</li>
 					</ul>
 				</section>
@@ -1532,7 +1533,7 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 					<h3>Statistical Machine translation: classical approach</h3>
 					<small>
 					<ul>
-						<li>Translation from source to target ($t\rightarrow s$)</li>
+						<li>Translation from source to target ($s\rightarrow t$)</li>
 						<li>Source sentence: $s = s_1^m  = s_1..s_j..s_m$</li>
 						<li>Target sentence: $t = t_1^I = t_1..t_i..t_I$</li>
 						<li class="fragment">Search for the best translation:
@@ -1582,7 +1583,7 @@ Y = tf.nn.softmax(tf.matmul(Y4, W5) + b5)
 						<li>SMT basline: 33.30 BLEU.</li>
 						<li>Beam search for inference: 12 size.</li>
 						<li>Neural Machine Tranlation system (NMT): 30.59 BLEU and 34.91 ensemble of 5.</li>
-						<li>$\text{BLEU} = \text{BP} \exp{\sum_{i=1}^N \frac{\log(p_n)}{N}}$ where $p_n$ is the n_gram precision and BP is brevity prenalty</li>
+						<li>$\text{BLEU} = \text{BP} \exp{\sum_{i=1}^N \frac{\log(p_n)}{N}}$ where $p_n$ is the n-gram precision and BP is brevity penalty</li>
 					</ul>
 					</small>
 					<img height="300" data-src="reveal.js-3.0.0/images/seq2seq_lstm.png">
